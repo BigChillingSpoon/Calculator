@@ -1,0 +1,133 @@
+﻿<Window x:Class="Calculator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calculator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="400">
+    <Grid Background="#1E1E1E">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- File input -->
+            <RowDefinition Height="Auto"/>
+            <!-- Display -->
+            <RowDefinition Height="*"/>
+            <!-- Buttons -->
+            <RowDefinition Height="Auto"/>
+            <!-- File calculate -->
+        </Grid.RowDefinitions>
+
+
+        <!-- FILE SELECTION SECTION -->
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0 0 0 20">
+
+            <!-- Input file -->
+            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                <TextBlock Text="Input file:" Foreground="White" Width="90" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding InputFilePath}" Width="220" Margin="0 0 10 0"/>
+                <Button Content="Browse..."
+                        Command="{Binding SelectInputFileCommand}"/>
+            </StackPanel>
+
+            <!-- Output directory -->
+            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                <TextBlock Text="Output dir:" Foreground="White" Width="90" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding OutputDirectory}" Width="220" Margin="0 0 10 0"/>
+                <Button Content="Browse..."
+                        Command="{Binding SelectOutputDirectoryCommand}"/>
+            </StackPanel>
+        </StackPanel>
+
+
+        <!-- DISPLAY -->
+        <TextBox Grid.Row="1"
+                 Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"
+                 FontSize="34"
+                 FontWeight="Bold"
+                 VerticalContentAlignment="Center"
+                 HorizontalContentAlignment="Right"
+                 Padding="10"
+                 Background="#333"
+                 Foreground="White"
+                 BorderThickness="0"
+                 Margin="0 0 0 20"
+                 IsReadOnly="True"/>
+
+
+        <!-- BUTTON GRID (Calculator buttons) -->
+        <Grid Grid.Row="2" Margin="0 0 0 20">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Row 1 -->
+            <Button Grid.Row="0" Grid.Column="0" Content="C"
+                    Command="{Binding ClearCommand}"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="←"
+                    Command="{Binding BackSpaceCommand}"/>
+            <Button Grid.Row="0" Grid.Column="2" Content="±"
+                    Command="{Binding OperationCommand}" CommandParameter="sign"/>
+            <Button Grid.Row="0" Grid.Column="3" Content="/"
+                    Command="{Binding OperationCommand}" CommandParameter="/"/>
+
+            <!-- Row 2 -->
+            <Button Grid.Row="1" Grid.Column="0" Content="7"
+                    Command="{Binding DigitCommand}" CommandParameter="7"/>
+            <Button Grid.Row="1" Grid.Column="1" Content="8"
+                    Command="{Binding DigitCommand}" CommandParameter="8"/>
+            <Button Grid.Row="1" Grid.Column="2" Content="9"
+                    Command="{Binding DigitCommand}" CommandParameter="9"/>
+            <Button Grid.Row="1" Grid.Column="3" Content="*"
+                    Command="{Binding OperationCommand}" CommandParameter="*"/>
+
+            <!-- Row 3 -->
+            <Button Grid.Row="2" Grid.Column="0" Content="4"
+                    Command="{Binding DigitCommand}" CommandParameter="4"/>
+            <Button Grid.Row="2" Grid.Column="1" Content="5"
+                    Command="{Binding DigitCommand}" CommandParameter="5"/>
+            <Button Grid.Row="2" Grid.Column="2" Content="6"
+                    Command="{Binding DigitCommand}" CommandParameter="6"/>
+            <Button Grid.Row="2" Grid.Column="3" Content="-"
+                    Command="{Binding OperationCommand}" CommandParameter="-"/>
+
+            <!-- Row 4 -->
+            <Button Grid.Row="3" Grid.Column="0" Content="1"
+                    Command="{Binding DigitCommand}" CommandParameter="1"/>
+            <Button Grid.Row="3" Grid.Column="1" Content="2"
+                    Command="{Binding DigitCommand}" CommandParameter="2"/>
+            <Button Grid.Row="3" Grid.Column="2" Content="3"
+                    Command="{Binding DigitCommand}" CommandParameter="3"/>
+            <Button Grid.Row="3" Grid.Column="3" Content="+"
+                    Command="{Binding OperationCommand}" CommandParameter="+"/>
+
+            <!-- Row 5 -->
+            <Button Grid.Row="4" Grid.Column="0" Content="0"
+                    Command="{Binding DigitCommand}" CommandParameter="0"/>
+            <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Content="="
+                    Command="{Binding EvaluateCommand}"/>
+            <Button Grid.Row="4" Grid.Column="3" Content="."
+                    Command="{Binding DigitCommand}" CommandParameter="."/>
+        </Grid>
+
+
+        <!-- BUTTON – Evaluate from file -->
+        <Button Grid.Row="3"
+                Content="Evaluate from file"
+                Height="40"
+                Command="{Binding EvaluateFromFileCommand}"
+                HorizontalAlignment="Stretch"/>
+    </Grid>
+</Window>

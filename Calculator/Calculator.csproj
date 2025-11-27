@@ -9,12 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Calculator.Core\Calculator.Core.csproj" />
-    <ProjectReference Include="..\Calculator.IO\Calculator.IO.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\Calculator.Core\Calculator.Core.csproj" />
+    <ProjectReference Include="..\Calculator.IO\Calculator.IO.csproj" />
   </ItemGroup>
 
 </Project>
