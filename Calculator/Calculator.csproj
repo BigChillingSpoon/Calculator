@@ -13,8 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Calculator.Core\Calculator.Core.csproj" />
-    <ProjectReference Include="..\Calculator.IO\Calculator.IO.csproj" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Calculator.App\Calculator.AppLayer.csproj" />
   </ItemGroup>
 
 </Project>
