@@ -4,7 +4,7 @@
 
     <!-- File selection labels -->
     <sys:String x:Key="InputFileLabel">Input file:</sys:String>
-    <sys:String x:Key="OutputDirLabel">Output dir:</sys:String>
+    <sys:String x:Key="OutputDirLabel">Output directory:</sys:String>
     <sys:String x:Key="OutputFileNameLabel">Output file name:</sys:String>
 
     <!-- Button labels -->
