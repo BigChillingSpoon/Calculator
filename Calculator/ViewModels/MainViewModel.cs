@@ -45,6 +45,13 @@ namespace Calculator.ViewModels
         #endregion Constructors
 
         #region Properties
+        private string _currentExpression;
+        public string CurrentExpression
+        {
+            get => _currentExpression;
+            set => SetProperty(ref _currentExpression, value);
+        }
+
         private string _input;
         public string Input
         {
@@ -103,7 +110,6 @@ namespace Calculator.ViewModels
         public AsyncRelayCommand SelectInputFileCommand { get; }
         public AsyncRelayCommand SelectOutputDirectoryCommand { get; }
         public AsyncRelayCommand EvaluateFromFileCommand { get; }
-        public RelayCommand ToggleMenuCommand { get; }
         #endregion Commands
 
         #region Command Handlers
@@ -119,8 +125,10 @@ namespace Calculator.ViewModels
                 var result = _evaluationProcessingService.ProcessEvaluation(_input);
 
                 if (result.Success)
-                
+                {
+                    CurrentExpression = _input;
                     Input = result.Value.ToString();
+                }
                 else
                     HandleEvaluationError(result);
             }
@@ -138,13 +146,16 @@ namespace Calculator.ViewModels
         private void OnClear(object parameter)
         {
             Input = string.Empty;
+            CurrentExpression = string.Empty;
         }
 
         private void OnDigit(object parameter)
         {
             if (parameter is string digitString)
             {
-                Input += digitString;
+                //whether is digit pressed after evaluation, input will be replaced -> new calculation, otherwise append
+                Input = !string.IsNullOrEmpty(_currentExpression) ? digitString : _input + digitString;
+                CurrentExpression = String.Empty;
             }
         }
 
@@ -153,15 +164,14 @@ namespace Calculator.ViewModels
             if (parameter is string operationString)
             {
                 Input += operationString;
+                CurrentExpression = String.Empty;
             }
         }
 
         private void OnBackSpace(object parameter)
         {
             if (!string.IsNullOrEmpty(Input))
-            {
                 Input = Input[..^1];
-            }
         }
 
         // File operations
