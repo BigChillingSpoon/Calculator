@@ -56,40 +56,21 @@ namespace Calculator.ViewModels
         public string Input
         {
             get => _input;
-            set
-            {
-                if (SetProperty(ref _input, value))
-                {
-                    // Update command states when input changes
-                    CommandManager.InvalidateRequerySuggested();
-                }
-            }
+            set => SetProperty(ref _input, value);
         }
 
         private string _inputFilePath;
         public string InputFilePath
         {
             get => _inputFilePath;
-            set
-            {
-                if (SetProperty(ref _inputFilePath, value))
-                {
-                    CommandManager.InvalidateRequerySuggested();
-                }
-            }
+            set => SetProperty(ref _inputFilePath, value);
         }
 
         private string _outputDirectory;
         public string OutputDirectory
         {
             get => _outputDirectory;
-            set
-            {
-                if (SetProperty(ref _outputDirectory, value))
-                {
-                    CommandManager.InvalidateRequerySuggested();
-                }
-            }
+            set => SetProperty(ref _outputDirectory, value);
         }
 
         private string _outputFileName;

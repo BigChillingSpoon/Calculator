@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -11,7 +8,6 @@ namespace Calculator.Extensions.Commands
     {
         private readonly Func<Task> _execute;
         private readonly Func<bool>? _canExecute;
-
         private bool _isExecuting;
 
         public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute = null)
@@ -24,11 +20,25 @@ namespace Calculator.Extensions.Commands
         {
             if (_isExecuting)
                 return false;
-
             return _canExecute?.Invoke() ?? true;
         }
 
-        public event EventHandler? CanExecuteChanged;
+        // Hook into WPF's CommandManager for automatic CanExecute updates
+        public event EventHandler? CanExecuteChanged
+        {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+                _canExecuteChanged += value;
+            }
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+                _canExecuteChanged -= value;
+            }
+        }
+
+        private event EventHandler? _canExecuteChanged;
 
         public async void Execute(object? parameter)
         {
@@ -51,7 +61,8 @@ namespace Calculator.Extensions.Commands
 
         public void RaiseCanExecuteChanged()
         {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            _canExecuteChanged?.Invoke(this, EventArgs.Empty);
+            CommandManager.InvalidateRequerySuggested();
         }
     }
 }
