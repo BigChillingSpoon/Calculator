@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- OPERATION BUTTON STYLES-->
+    <!-- NUMBERIC BUTTON STYLES (0 - 9)-->
     <Style x:Key="CalculatorButtonStyle" TargetType="Button">
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
@@ -131,7 +131,7 @@
         </Setter>
     </Style>
 
-    <!-- SPECIAL OPERATION BUTTON STYLE-->
+    <!-- SPECIAL OPERATION BUTTON STYLE (Backspace, Clear)-->
     <Style x:Key="SpecialCalculatorButtonStyle" TargetType="Button" BasedOn="{StaticResource CalculatorButtonStyle}">
         <Setter Property="Background" Value="{StaticResource AccentGrayBrush }"/>
         <Setter Property="Template">
@@ -168,7 +168,7 @@
         </Setter>
     </Style>
 
-    <!-- Style pro operační tlačítka (+, -, *, /, =) -->
+    <!-- OPERATION BUTTON STYLES (+, -, *, /, =) -->
     <Style x:Key="OperatorButtonStyle" TargetType="Button" BasedOn="{StaticResource CalculatorButtonStyle}">
         <Setter Property="Background" Value="{StaticResource AccentBlueBrush}"/>
         <Setter Property="FontSize" Value="24"/>

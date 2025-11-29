@@ -13,12 +13,13 @@
                 <ResourceDictionary Source="./Resources/Styles/TextBlockStyles.xaml"/>
                 <ResourceDictionary Source="./Resources/Styles/SpinnerStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
             <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         </ResourceDictionary>
     </Window.Resources>
 
+    <!--CONTAINER GRID-->
     <Grid>
+        <!--CONTENT GRID -->
         <Grid Background="{StaticResource AppBackgroundBrush}">
 
             <Grid.RowDefinitions>
@@ -28,87 +29,84 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- FILE SELECTION SECTION (RESPONSIVE) -->
+            <!-- FILE SELECTION SECTION -->
             <Grid Grid.Row="0" Margin="10 10 10 20" IsSharedSizeScope="True">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                
-                <!-- Input file -->
-                    <Grid Grid.Row="0" Margin="0 8 0 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="FileLabelColumn"/>
-                            <!-- label -->
-                            <ColumnDefinition Width="*"/>
-                            <!-- textbox flexible -->
-                            <ColumnDefinition Width="Auto"/>
-                            <!-- browse -->
-                        </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{StaticResource InputFileLabel}"
+                <!-- INPUT FILE -->
+                <Grid Grid.Row="0" Margin="0 8 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="FileLabelColumn"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="{StaticResource InputFileLabel}"
                                Style="{StaticResource FileLabelTextBlockStyle}"
                                VerticalAlignment="Center"
                                Grid.Column="0"/>
 
-                        <TextBox Text="{Binding InputFilePath}"
+                    <TextBox Text="{Binding InputFilePath}"
                              Style="{StaticResource FileInputTextBoxStyle}"
                              VerticalAlignment="Center"
                              Margin="10 0 10 0"
                              Grid.Column="1"/>
 
-                        <Button Content="{StaticResource BrowseButton}"
+                    <Button Content="{StaticResource BrowseButton}"
                             Command="{Binding SelectInputFileCommand}"
                             Style="{StaticResource BrowseButtonStyle}"
                             VerticalAlignment="Center"
                             Grid.Column="2"/>
-                    </Grid>
+                </Grid>
 
-                    <!-- Output directory -->
-                    <Grid Grid.Row="1" Margin="0 8 0 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="FileLabelColumn"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                <!-- OUTPUT DIRECTORY -->
+                <Grid Grid.Row="1" Margin="0 8 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="FileLabelColumn"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{StaticResource OutputDirLabel}"
+                    <TextBlock Text="{StaticResource OutputDirLabel}"
                                Style="{StaticResource FileLabelTextBlockStyle}"
                                VerticalAlignment="Center"
                                Grid.Column="0"/>
 
-                        <TextBox Text="{Binding OutputDirectory}"
+                    <TextBox Text="{Binding OutputDirectory}"
                              Style="{StaticResource FileInputTextBoxStyle}"
                              VerticalAlignment="Center"
                              Margin="10 0 10 0"
                              Grid.Column="1"/>
 
-                        <Button Content="{StaticResource BrowseButton}"
+                    <Button Content="{StaticResource BrowseButton}"
                             Command="{Binding SelectOutputDirectoryCommand}"
                             Style="{StaticResource BrowseButtonStyle}"
                             VerticalAlignment="Center"
                             Grid.Column="2"/>
-                    </Grid>
+                </Grid>
 
-                    <!-- Output file name -->
-                    <Grid Grid.Row="3" Margin="0 8 0 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="FileLabelColumn"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                <!-- OUTPUT FILE NAME -->
+                <Grid Grid.Row="3" Margin="0 8 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="FileLabelColumn"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{StaticResource OutputFileNameLabel}"
+                    <TextBlock Text="{StaticResource OutputFileNameLabel}"
                                Style="{StaticResource FileLabelTextBlockStyle}"
                                VerticalAlignment="Center"
                                Grid.Column="0"/>
 
-                        <TextBox Text="{Binding OutputFileName}"
+                    <TextBox Text="{Binding OutputFileName}"
                              Style="{StaticResource FileInputTextBoxStyle}"
                              VerticalAlignment="Center"
                              Margin="10 0 10 0"
                              Grid.Column="1"/>
-                    </Grid>
+                </Grid>
 
             </Grid>
             <!-- DISPLAY -->
@@ -222,7 +220,7 @@
                         Style="{StaticResource CalculatorButtonStyle}"/>
             </Grid>
 
-            <!-- Evaluate from file button -->
+            <!-- EVALUATE FROM FILE BUTTON -->
             <Button Grid.Row="3"
                     Content="{StaticResource EvaluateFromFileButton}"
                     Height="40" Margin="10"

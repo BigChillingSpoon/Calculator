@@ -2,16 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!-- File selection labels -->
+    <!-- FILE SELECTION LABELS -->
     <sys:String x:Key="InputFileLabel">Input file:</sys:String>
     <sys:String x:Key="OutputDirLabel">Output directory:</sys:String>
     <sys:String x:Key="OutputFileNameLabel">Output file name:</sys:String>
 
-    <!-- Button labels -->
+    <!-- BUTTON LABELS -->
     <sys:String x:Key="BrowseButton">Browse...</sys:String>
     <sys:String x:Key="EvaluateFromFileButton">Evaluate from file</sys:String>
 
-    <!-- Calculator buttons -->
+    <!-- CALCULATOR BUTTONS -->
     <sys:String x:Key="ButtonClear">C</sys:String>
     <sys:String x:Key="ButtonBackspace">←</sys:String>
     <sys:String x:Key="ButtonSign">±</sys:String>
@@ -22,7 +22,7 @@
     <sys:String x:Key="ButtonEqual">=</sys:String>
     <sys:String x:Key="ButtonDecimal">.</sys:String>
 
-    <!-- Common messages -->
+    <!-- COMMON MESSAGES -->
     <sys:String x:Key="ProcessingLabel">Processing...</sys:String>
 
 </ResourceDictionary>
