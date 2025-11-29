@@ -34,7 +34,6 @@ namespace Calculator.ViewModels
             SelectInputFileCommand = new AsyncRelayCommand(OnSelectInputFileAsync, () => !IsBusy);
             SelectOutputDirectoryCommand = new AsyncRelayCommand(OnSelectOutputDirectory, () => !IsBusy);
             EvaluateFromFileCommand = new AsyncRelayCommand(OnEvaluateFromFileAsync, CanEvaluateFromFile);
-            ToggleMenuCommand = new RelayCommand(OnToggleMenu, _ => !IsBusy);
 
             // Initialize properties
             _input = string.Empty;
@@ -230,9 +229,7 @@ namespace Calculator.ViewModels
 
             try
             {
-                var processResult = await _fileProcessingService.ProcessEvaluationFromFileAsync(
-                    InputFilePath,
-                    OutputDirectory);
+                var processResult = await _fileProcessingService.ProcessEvaluationFromFileAsync(InputFilePath, OutputDirectory, OutputFileName);
 
                 if (processResult.Success)
                     _notifyService.ShowInfo("File processed successfully. Check output directory for results.");

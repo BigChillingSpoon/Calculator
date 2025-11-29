@@ -11,6 +11,7 @@ using Calculator.IO.Services.Interfaces;
 using Calculator.IO.Services;
 using Calculator.AppLayer.Services;
 using Calculator.AppLayer.Services.Interfaces;
+using Calculator.Extensions;
 
 namespace Calculator
 {
@@ -21,6 +22,7 @@ namespace Calculator
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            UnhandledExceptionHandler.Register();
             var services = ConfigureServices();
             var mainWindow = services.GetRequiredService<MainWindow>();
             mainWindow.Show();

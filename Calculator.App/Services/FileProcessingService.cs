@@ -22,7 +22,7 @@ namespace Calculator.AppLayer.Services
             _expressionEvaluator = expressionEvaluator;
         }
 
-        public async Task<ProcessResult> ProcessEvaluationFromFileAsync(string inputFilePath, string outputDirectoryPath)
+        public async Task<ProcessResult> ProcessEvaluationFromFileAsync(string inputFilePath, string outputDirectoryPath, string outputFileName)
         {
             var validationResult = ProcessUserInputs(inputFilePath, outputDirectoryPath);
             if (!validationResult.Success)
