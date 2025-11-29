@@ -10,10 +10,20 @@ namespace Calculator.Core
 {
     public class ExpressionEvaluator : IExpressionEvaluator
     {
+        private readonly IExpressionValidator _expressionValidator;
+        public ExpressionEvaluator(IExpressionValidator expressionValidator)
+        {
+            _expressionValidator = expressionValidator;
+        }
+
         public ParsingResult Evaluate(string expression)
         {
             try
             {
+                var validationResult = _expressionValidator.ValidateExpression(expression);
+                if (!validationResult.Success)
+                    return validationResult;
+
                 var computationResult = new System.Data.DataTable().Compute(expression, null);
                 var value = Convert.ToDouble(computationResult);
                 var result = new ParsingResult
@@ -28,7 +38,9 @@ namespace Calculator.Core
                 return new ParsingResult
                 {
                     Success = false,
-                    ErrorMessage = ex.Message
+                    ErrorMessage = ex.Message,
+                    ErrorType = Models.Enums.ErrorTypeCore.Error
+
                 };
             }
         }

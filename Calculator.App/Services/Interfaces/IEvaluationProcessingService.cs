@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Calculator.AppLayer.Services.Interfaces
 {
-    public interface IFileProcessingService
+    public interface IEvaluationProcessingService
     {
-        Task<ProcessResult> ProcessEvaluationFromFileAsync(string inputFilePath, string outputDirectoryPath, string outputFileName); 
+        public ProcessResult ProcessEvaluation(string expression);
     }
 }

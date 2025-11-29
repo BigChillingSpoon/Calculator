@@ -6,128 +6,193 @@
         xmlns:local="clr-namespace:Calculator"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="400">
-    <Grid Background="#1E1E1E">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <!-- File input -->
-            <RowDefinition Height="Auto"/>
-            <!-- Display -->
-            <RowDefinition Height="*"/>
-            <!-- Buttons -->
-            <RowDefinition Height="Auto"/>
-            <!-- File calculate -->
-        </Grid.RowDefinitions>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
 
+    <Grid>
+        <Grid Background="#1E1E1E">
 
-        <!-- FILE SELECTION SECTION -->
-        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0 0 0 20">
-
-            <!-- Input file -->
-            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Input file:" Foreground="White" Width="90" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding InputFilePath}" Width="220" Margin="0 0 10 0"/>
-                <Button Content="Browse..."
-                        Command="{Binding SelectInputFileCommand}"/>
-            </StackPanel>
-
-            <!-- Output directory -->
-            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Output dir:" Foreground="White" Width="90" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding OutputDirectory}" Width="220" Margin="0 0 10 0"/>
-                <Button Content="Browse..."
-                        Command="{Binding SelectOutputDirectoryCommand}"/>
-            </StackPanel>
-        </StackPanel>
-
-
-        <!-- DISPLAY -->
-        <TextBox Grid.Row="1"
-                 Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"
-                 FontSize="34"
-                 FontWeight="Bold"
-                 VerticalContentAlignment="Center"
-                 HorizontalContentAlignment="Right"
-                 Padding="10"
-                 Background="#333"
-                 Foreground="White"
-                 BorderThickness="0"
-                 Margin="0 0 0 20"
-                 IsReadOnly="True"/>
-
-
-        <!-- BUTTON GRID (Calculator buttons) -->
-        <Grid Grid.Row="2" Margin="0 0 0 20">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+            <!-- FILE SELECTION SECTION -->
+            <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0 0 0 20">
 
-            <!-- Row 1 -->
-            <Button Grid.Row="0" Grid.Column="0" Content="C"
+                <!-- Input file -->
+                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                    <TextBlock Text="{StaticResource InputFileLabel}"
+                               Foreground="White" Width="90"
+                               VerticalAlignment="Center" Margin="0 0 5 0"/>
+                    <TextBox Text="{Binding InputFilePath}" Width="220"
+                             Margin="0 0 10 0" Background="LightGray"/>
+                    <Button Content="{StaticResource BrowseButton}"
+                            Command="{Binding SelectInputFileCommand}"/>
+                </StackPanel>
+
+                <!-- Output directory -->
+                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                    <TextBlock Text="{StaticResource OutputDirLabel}"
+                               Foreground="White" Width="90"
+                               VerticalAlignment="Center" Margin="0 0 5 0"/>
+                    <TextBox Text="{Binding OutputDirectory}" Width="220"
+                             Margin="0 0 10 0" Background="LightGray"/>
+                    <Button Content="{StaticResource BrowseButton}"
+                            Command="{Binding SelectOutputDirectoryCommand}"/>
+                </StackPanel>
+
+                <!-- Output file name -->
+                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                    <TextBlock Text="{StaticResource OutputFileNameLabel}"
+                               Foreground="White" Width="90"
+                               VerticalAlignment="Center" Margin="0 0 5 0"/>
+                    <TextBox Text="{Binding OutputFileName}"
+                             Width="220" Margin="0 0 10 0"
+                             Background="LightGray"/>
+                </StackPanel>
+
+            </StackPanel>
+
+            <!-- DISPLAY -->
+            <TextBox Grid.Row="1"
+                     Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="34" FontWeight="Bold"
+                     VerticalContentAlignment="Center"
+                     HorizontalContentAlignment="Right"
+                     Padding="10"
+                     Background="#333" Foreground="White"
+                     BorderThickness="0" Margin="0 0 0 20"
+                     IsReadOnly="True"/>
+
+            <!-- BUTTON GRID -->
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="Margin" Value="2"/>
+                        <Setter Property="Background" Value="#F5F5F5"/>
+                        <Setter Property="BorderBrush" Value="#DDDDDD"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                    </Style>
+                </Grid.Resources>
+
+                <!-- Row 0: C, ←, -, + -->
+                <Button Grid.Row="0" Grid.Column="0" Content="{StaticResource ButtonClear}"
                     Command="{Binding ClearCommand}"/>
-            <Button Grid.Row="0" Grid.Column="1" Content="←"
+
+                <Button Grid.Row="0" Grid.Column="1" Content="{StaticResource ButtonBackspace}"
                     Command="{Binding BackSpaceCommand}"/>
-            <Button Grid.Row="0" Grid.Column="2" Content="±"
-                    Command="{Binding OperationCommand}" CommandParameter="sign"/>
-            <Button Grid.Row="0" Grid.Column="3" Content="/"
-                    Command="{Binding OperationCommand}" CommandParameter="/"/>
 
-            <!-- Row 2 -->
-            <Button Grid.Row="1" Grid.Column="0" Content="7"
-                    Command="{Binding DigitCommand}" CommandParameter="7"/>
-            <Button Grid.Row="1" Grid.Column="1" Content="8"
-                    Command="{Binding DigitCommand}" CommandParameter="8"/>
-            <Button Grid.Row="1" Grid.Column="2" Content="9"
-                    Command="{Binding DigitCommand}" CommandParameter="9"/>
-            <Button Grid.Row="1" Grid.Column="3" Content="*"
-                    Command="{Binding OperationCommand}" CommandParameter="*"/>
-
-            <!-- Row 3 -->
-            <Button Grid.Row="2" Grid.Column="0" Content="4"
-                    Command="{Binding DigitCommand}" CommandParameter="4"/>
-            <Button Grid.Row="2" Grid.Column="1" Content="5"
-                    Command="{Binding DigitCommand}" CommandParameter="5"/>
-            <Button Grid.Row="2" Grid.Column="2" Content="6"
-                    Command="{Binding DigitCommand}" CommandParameter="6"/>
-            <Button Grid.Row="2" Grid.Column="3" Content="-"
+                <Button Grid.Row="0" Grid.Column="2" Content="{StaticResource ButtonSubtract}"
                     Command="{Binding OperationCommand}" CommandParameter="-"/>
 
-            <!-- Row 4 -->
-            <Button Grid.Row="3" Grid.Column="0" Content="1"
-                    Command="{Binding DigitCommand}" CommandParameter="1"/>
-            <Button Grid.Row="3" Grid.Column="1" Content="2"
-                    Command="{Binding DigitCommand}" CommandParameter="2"/>
-            <Button Grid.Row="3" Grid.Column="2" Content="3"
-                    Command="{Binding DigitCommand}" CommandParameter="3"/>
-            <Button Grid.Row="3" Grid.Column="3" Content="+"
+                <Button Grid.Row="0" Grid.Column="3" Content="{StaticResource ButtonAdd}"
                     Command="{Binding OperationCommand}" CommandParameter="+"/>
 
-            <!-- Row 5 -->
-            <Button Grid.Row="4" Grid.Column="0" Content="0"
-                    Command="{Binding DigitCommand}" CommandParameter="0"/>
-            <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Content="="
+                <!-- Row 1: 1, 2, 3, ÷ -->
+                <Button Grid.Row="1" Grid.Column="0" Content="1"
+                    Command="{Binding DigitCommand}" CommandParameter="1"/>
+
+                <Button Grid.Row="1" Grid.Column="1" Content="2"
+                    Command="{Binding DigitCommand}" CommandParameter="2"/>
+
+                <Button Grid.Row="1" Grid.Column="2" Content="3"
+                    Command="{Binding DigitCommand}" CommandParameter="3"/>
+
+                <Button Grid.Row="1" Grid.Column="3" Content="{StaticResource ButtonDivide}"
+                    Command="{Binding OperationCommand}" CommandParameter="/"/>
+
+                <!-- Row 2: 4, 5, 6, × -->
+                <Button Grid.Row="2" Grid.Column="0" Content="4"
+                    Command="{Binding DigitCommand}" CommandParameter="4"/>
+
+                <Button Grid.Row="2" Grid.Column="1" Content="5"
+                    Command="{Binding DigitCommand}" CommandParameter="5"/>
+
+                <Button Grid.Row="2" Grid.Column="2" Content="6"
+                    Command="{Binding DigitCommand}" CommandParameter="6"/>
+
+                <Button Grid.Row="2" Grid.Column="3" Content="{StaticResource ButtonMultiply}"
+                    Command="{Binding OperationCommand}" CommandParameter="*"/>
+
+                <!-- Row 3: 7, 8, 9 -->
+                <Button Grid.Row="3" Grid.Column="0" Content="7"
+                    Command="{Binding DigitCommand}" CommandParameter="7"/>
+
+                <Button Grid.Row="3" Grid.Column="1" Content="8"
+                    Command="{Binding DigitCommand}" CommandParameter="8"/>
+
+                <Button Grid.Row="3" Grid.Column="2" Content="9"
+                    Command="{Binding DigitCommand}" CommandParameter="9"/>
+
+                <!-- = spans rows 3-4, column 3 -->
+                <Button Grid.Row="3" Grid.Column="3" Grid.RowSpan="2" Content="{StaticResource ButtonEqual}"
                     Command="{Binding EvaluateCommand}"/>
-            <Button Grid.Row="4" Grid.Column="3" Content="."
-                    Command="{Binding DigitCommand}" CommandParameter="."/>
+
+                <!-- Row 4: 0 spans columns 0-2 -->
+                <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="0"
+                    Command="{Binding DigitCommand}" CommandParameter="0"/>
+            </Grid>
+            <!-- Evaluate from file button -->
+            <Button Grid.Row="3"
+                    Content="{StaticResource EvaluateFromFileButton}"
+                    Height="40"
+                    Command="{Binding EvaluateFromFileCommand}"
+                    HorizontalAlignment="Stretch"/>
         </Grid>
 
+        <!-- BUSY OVERLAY -->
+        <Grid Background="#80000000"
+              Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}">
 
-        <!-- BUTTON – Evaluate from file -->
-        <Button Grid.Row="3"
-                Content="Evaluate from file"
-                Height="40"
-                Command="{Binding EvaluateFromFileCommand}"
-                HorizontalAlignment="Stretch"/>
+            <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid>
+                    <Ellipse Height="5" Width="5" Stroke="#aaaaaa"
+                             StrokeThickness="1" Margin="10"/>
+                    <Ellipse Height="5" Width="5" Stroke="White"
+                             StrokeThickness="1"
+                             StrokeDashArray="2 2" Margin="10"
+                             RenderTransformOrigin="0.5,0.5">
+                        <Ellipse.RenderTransform>
+                            <RotateTransform x:Name="spinnerRotate" />
+                        </Ellipse.RenderTransform>
+                        <Ellipse.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimation Storyboard.TargetName="spinnerRotate"
+                                                         Storyboard.TargetProperty="Angle"
+                                                         From="0" To="360"
+                                                         Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Ellipse.Triggers>
+                    </Ellipse>
+                </Grid>
+            </Viewbox>
+
+        </Grid>
     </Grid>
 </Window>

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Calculator.Commands
+namespace Calculator.Extensions.Commands
 {
     public class AsyncRelayCommand : ICommand
     {

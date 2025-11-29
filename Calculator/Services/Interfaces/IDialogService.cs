@@ -9,5 +9,6 @@ namespace Calculator.Services.Interfaces
     public interface IDialogService
     {
         public bool ShowOpenFileDialog(out string filePath);
+        public bool ShowOpenDirectoryDialog(out string dirPath);
     }
 }

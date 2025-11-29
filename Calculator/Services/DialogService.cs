@@ -9,7 +9,14 @@ using System.Threading.Tasks;
 namespace Calculator.Services
 {
     public class DialogService : IDialogService
-    { 
+    {
+        public bool ShowOpenDirectoryDialog(out string dirPath)
+        {
+            var dialog = new OpenFolderDialog();
+            dirPath = dialog.ShowDialog() == true ? dialog.FolderName : String.Empty;
+            return !String.IsNullOrEmpty(dirPath);
+        }
+
         public bool ShowOpenFileDialog(out string filePath)
         {
             var dialog = new OpenFileDialog();

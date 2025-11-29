@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- File selection labels -->
+    <sys:String x:Key="InputFileLabel">Input file:</sys:String>
+    <sys:String x:Key="OutputDirLabel">Output dir:</sys:String>
+    <sys:String x:Key="OutputFileNameLabel">Output file name:</sys:String>
+
+    <!-- Button labels -->
+    <sys:String x:Key="BrowseButton">Browse...</sys:String>
+    <sys:String x:Key="EvaluateFromFileButton">Evaluate from file</sys:String>
+
+    <!-- Calculator buttons -->
+    <sys:String x:Key="ButtonClear">C</sys:String>
+    <sys:String x:Key="ButtonBackspace">←</sys:String>
+    <sys:String x:Key="ButtonSign">±</sys:String>
+    <sys:String x:Key="ButtonDivide">÷</sys:String>
+    <sys:String x:Key="ButtonMultiply">×</sys:String>
+    <sys:String x:Key="ButtonSubtract">-</sys:String>
+    <sys:String x:Key="ButtonAdd">+</sys:String>
+    <sys:String x:Key="ButtonEqual">=</sys:String>
+    <sys:String x:Key="ButtonDecimal">.</sys:String>
+
+    <!-- Common messages -->
+    <sys:String x:Key="ProcessingLabel">Processing...</sys:String>
+
+</ResourceDictionary>

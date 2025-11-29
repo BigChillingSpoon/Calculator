@@ -30,23 +30,25 @@ namespace Calculator
         {
             var services = new ServiceCollection();
 
-            services.AddSingleton<INotifyService, NotifyService>();
-            services.AddSingleton<IDialogService, DialogService>();
+            //WPF
+            services.AddTransient<INotifyService, NotifyService>();
+            services.AddTransient<IDialogService, DialogService>();
+
+            //APPLAYER
+            services.AddSingleton<IFileProcessingService, FileProcessingService>();
+            services.AddSingleton<IEvaluationProcessingService, EvaluationProcessingService>(); 
+
+            // CORE - TODO presunout do extensionu v core
+            services.AddSingleton<IExpressionEvaluator, ExpressionEvaluator>();
+            services.AddSingleton<IExpressionValidator, ExpressionValidator>();
+
+            //IO 
             services.AddSingleton<IFileService, FileService>();
             
-            ////APPLAYER
-            services.AddSingleton<IFileProcessingService, FileProcessingService>();
-
-            //// CORE - TODO presunout do extensionu v core
-            services.AddSingleton<IExpressionEvaluator, ExpressionEvaluator>();
-
-            //// Registrace CORE vrstvy
-            //services.AddSingleton<ICalculatorService, CalculatorService>();
-
-            // Registrace ViewModelů
+            //VM
             services.AddTransient<MainViewModel>();
 
-            // Registrace okna
+            //WINDOW
             services.AddTransient<MainWindow>();
 
             return services.BuildServiceProvider();

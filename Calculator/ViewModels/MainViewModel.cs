@@ -1,5 +1,4 @@
-﻿using Calculator.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,130 +6,282 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Calculator.Core.Interfaces;
 using Calculator.Services.Interfaces;
+using Calculator.AppLayer.Services.Interfaces;
+using Calculator.Core.Models.Enums;
+using Calculator.AppLayer.Models.Enums;
+using Calculator.Extensions.Commands;
 
 namespace Calculator.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
         #region Vars
-        private readonly IExpressionEvaluator _expressionEvaluator;
+        private readonly IEvaluationProcessingService _evaluationProcessingService;
         private readonly INotifyService _notifyService;
         private readonly IDialogService _dialogService;
+        private readonly IFileProcessingService _fileProcessingService;
         #endregion Vars
+
         #region Constructors
-        public MainViewModel(IExpressionEvaluator expressionEvaluator, INotifyService notifyService, IDialogService dialogService)
+        public MainViewModel(IEvaluationProcessingService evaluationProcessingService, INotifyService notifyService, IDialogService dialogService, IFileProcessingService fileProcessingService)
         {
-            EvaluateCommand = new RelayCommand(OnEvaluateExpression);
+            // Initialize commands
+            EvaluateCommand = new RelayCommand(OnEvaluateExpression, _ => !IsBusy && !string.IsNullOrWhiteSpace(Input));
             ClearCommand = new RelayCommand(OnClear, _ => !IsBusy);
             DigitCommand = new RelayCommand(OnDigit, _ => !IsBusy);
             OperationCommand = new RelayCommand(OnOperation, _ => !IsBusy);
-            BackSpaceCommand = new RelayCommand(OnBackSpace, _ => !IsBusy);
-            SelectInputFileCommand = new RelayCommand(OnSelectInputFile, _ => !IsBusy);
-            SelectOutputDirectoryCommand = new RelayCommand(OnSelectOutputDirectory, _ => !IsBusy);
-            EvaluateFromFileCommand = new AsyncRelayCommand(OnEvaluateFromFileAsync, () => !IsBusy);
-            _input = String.Empty;
-            _inputFileName = "No input file specified.";
-            _outputDirectory = "No output directory specified.";
-            _expressionEvaluator =  expressionEvaluator;//todo osetrit null
+            BackSpaceCommand = new RelayCommand(OnBackSpace, _ => !IsBusy && !string.IsNullOrEmpty(Input));
+            SelectInputFileCommand = new AsyncRelayCommand(OnSelectInputFileAsync, () => !IsBusy);
+            SelectOutputDirectoryCommand = new AsyncRelayCommand(OnSelectOutputDirectory, () => !IsBusy);
+            EvaluateFromFileCommand = new AsyncRelayCommand(OnEvaluateFromFileAsync, CanEvaluateFromFile);
+            ToggleMenuCommand = new RelayCommand(OnToggleMenu, _ => !IsBusy);
+
+            // Initialize properties
+            _input = string.Empty;
+            _evaluationProcessingService = evaluationProcessingService;
             _notifyService = notifyService;
             _dialogService = dialogService;
+            _fileProcessingService = fileProcessingService;
         }
         #endregion Constructors
-        #region Properties
 
+        #region Properties
         private string _input;
         public string Input
         {
             get => _input;
-            set => SetProperty(ref _input, value);
+            set
+            {
+                if (SetProperty(ref _input, value))
+                {
+                    // Update command states when input changes
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
         }
 
-        private string _inputFileName;
+        private string _inputFilePath;
         public string InputFilePath
         {
-            get => _inputFileName;
-            set => SetProperty(ref _inputFileName, value);
+            get => _inputFilePath;
+            set
+            {
+                if (SetProperty(ref _inputFilePath, value))
+                {
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
         }
-        
+
         private string _outputDirectory;
         public string OutputDirectory
         {
             get => _outputDirectory;
-            set => SetProperty(ref _outputDirectory, value);
+            set
+            {
+                if (SetProperty(ref _outputDirectory, value))
+                {
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
         }
-        private string _currentExpression;
-        private string CurrentExpression
+
+        private string _outputFileName;
+        public string OutputFileName
         {
-            get => _currentExpression;
-            set => SetProperty(ref _currentExpression, value);
+            get => _outputFileName;
+            set => SetProperty(ref _outputFileName, value);
         }
+
         #endregion Properties
+
         #region Commands
         public RelayCommand EvaluateCommand { get; }
         public RelayCommand ClearCommand { get; }
         public RelayCommand DigitCommand { get; }
         public RelayCommand OperationCommand { get; }
         public RelayCommand BackSpaceCommand { get; }
-        public RelayCommand SelectInputFileCommand { get; }
-        public RelayCommand SelectOutputDirectoryCommand { get; }
+        public AsyncRelayCommand SelectInputFileCommand { get; }
+        public AsyncRelayCommand SelectOutputDirectoryCommand { get; }
         public AsyncRelayCommand EvaluateFromFileCommand { get; }
+        public RelayCommand ToggleMenuCommand { get; }
         #endregion Commands
-        #region CommandHandlers
+
+        #region Command Handlers
         private void OnEvaluateExpression(object parameter)
         {
-            // Implementation for calculation
-            
-            var result = _expressionEvaluator.Evaluate(_input);
-            if(result.Success)
+            if (string.IsNullOrWhiteSpace(_input))
+                return;
+
+            IsBusy = true;
+
+            try
             {
-                Input = result.Value.ToString();
+                var result = _evaluationProcessingService.ProcessEvaluation(_input);
+
+                if (result.Success)
+                
+                    Input = result.Value.ToString();
+                else
+                    HandleEvaluationError(result);
             }
-            else
+            catch (Exception ex)
             {
-                _notifyService.ShowError(result.ErrorMessage);
                 Input = "Error";
+                _notifyService.ShowError($"Unexpected error: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
+
         private void OnClear(object parameter)
         {
-            Input = String.Empty;    
+            Input = string.Empty;
         }
+
         private void OnDigit(object parameter)
         {
-            if (parameter is null || parameter is not string digitString)
-               return;//handle this error for the programmer 
-            Input += digitString;
+            if (parameter is string digitString)
+            {
+                Input += digitString;
+            }
         }
+
         private void OnOperation(object parameter)
         {
-            if (parameter is null || parameter is not string operationString)
-                return;//handle this error for the programmer 
-            Input += operationString;
+            if (parameter is string operationString)
+            {
+                Input += operationString;
+            }
         }
+
         private void OnBackSpace(object parameter)
         {
-            Input = Input.Length > 0 ? Input[..^1] : String.Empty;
+            if (!string.IsNullOrEmpty(Input))
+            {
+                Input = Input[..^1];
+            }
         }
-        //files
-        private void OnSelectInputFile(object parameter)
+
+        // File operations
+        private async Task OnSelectInputFileAsync()
         {
-            
+            IsBusy = true;
+
+            try
+            {
+                if (_dialogService.ShowOpenFileDialog(out string inputFilePath))
+                {
+                    await Task.Yield();
+                    InputFilePath = inputFilePath;
+                }
+                else
+                {
+                    _notifyService.ShowWarning("No file selected.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _notifyService.ShowError($"Error selecting file: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
-        private void OnSelectOutputDirectory(object parameter)
+
+        private async Task OnSelectOutputDirectory()
         {
-            // Implementation for selecting output directory
+            IsBusy = true;
+
+            try
+            {
+                if (_dialogService.ShowOpenDirectoryDialog(out string outputDirectory))
+                {
+                    await Task.Yield();
+                    OutputDirectory = outputDirectory;
+                }
+                else
+                {
+                    _notifyService.ShowWarning("No directory selected.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _notifyService.ShowError($"Error selecting directory: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
+
         private async Task OnEvaluateFromFileAsync()
         {
-            // Implementation for calculating from file
+            if (!CanEvaluateFromFile())
+            {
+                _notifyService.ShowWarning("Please select both input file and output directory.");
+                return;
+            }
+
+            IsBusy = true;
+
+            try
+            {
+                var processResult = await _fileProcessingService.ProcessEvaluationFromFileAsync(
+                    InputFilePath,
+                    OutputDirectory);
+
+                if (processResult.Success)
+                    _notifyService.ShowInfo("File processed successfully. Check output directory for results.");
+                else
+                    HandleProcessingError(processResult);
+            }
+            catch (Exception ex)
+            {
+                _notifyService.ShowError($"Error processing file: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
-        #endregion CommandHandlers
-        #region Methods
-        
-        private void EvaluateExpression()
+
+        private bool CanEvaluateFromFile()
         {
-            // Implementation for evaluating the current expression
+            return !IsBusy
+                && !string.IsNullOrWhiteSpace(InputFilePath)
+                && !string.IsNullOrWhiteSpace(OutputDirectory);
         }
-        #endregion Methods
+        #endregion Command Handlers
+
+        #region Helper Methods
+        private void HandleEvaluationError(dynamic result)
+        {
+            if (result.ErrorType == ErrorType.Error)
+            {
+                Input = "Error";
+                _notifyService.ShowError(result.ErrorMessage);
+            }
+            else if (result.ErrorType == ErrorType.Warning)
+            {
+                _notifyService.ShowWarning(result.ErrorMessage);
+            }
+        }
+
+        private void HandleProcessingError(dynamic processResult)
+        {
+            if (processResult.ErrorType == ErrorType.Error)
+            {
+                _notifyService.ShowError(processResult.ErrorMessage);
+            }
+            else if (processResult.ErrorType == ErrorType.Warning)
+            {
+                _notifyService.ShowWarning(processResult.ErrorMessage);
+            }
+        }
+        #endregion Helper Methods
     }
 }

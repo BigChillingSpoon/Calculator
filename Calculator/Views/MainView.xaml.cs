@@ -22,5 +22,10 @@ namespace Calculator
             InitializeComponent();
             DataContext = vm;
         }
+        private void OverlayCloseMenu(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is MainViewModel vm)
+                vm.IsMenuOpen = false;
+        }
     }
 }

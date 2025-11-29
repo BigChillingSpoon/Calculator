@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calculator.Core.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace Calculator.Core.Models
         public bool Success { get; set; }
         public double Value { get; set; }
         public string ErrorMessage { get; set; } = string.Empty;
+        public ErrorTypeCore ErrorType { get; set; } = ErrorTypeCore.None;
     }
 }
