@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- SPINNER OVERLAY -->
+    <Style x:Key="LoadingSpinnerStyle" TargetType="Grid">
+        <Setter Property="Background" Value="{StaticResource OverlayBrush}"/>
+    </Style>
+
+    <!-- SPINNER VIEWBOX STYLE-->
+    <Style x:Key="SpinnerViewboxStyle" TargetType="Viewbox">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Width" Value="60"/>
+        <Setter Property="Height" Value="60"/>
+    </Style>
+
+    <!-- ANIMATED SPINNER TEMPLATE-->
+    <ControlTemplate x:Key="SpinnerTemplate">
+        <Grid>
+            <!-- BACKGROUND CIRCLE -->
+            <Ellipse Height="50" Width="50" 
+                     Stroke="{StaticResource DarkGrayBrush}"
+                     StrokeThickness="4"/>
+
+            <!-- FOREGROUND PARTIAL CIRCLE-->
+            <Ellipse Height="50" Width="50" 
+                     Stroke="{StaticResource AccentBlueBrush}"
+                     StrokeThickness="4"
+                     StrokeDashArray="8 4"
+                     RenderTransformOrigin="0.5,0.5">
+                <Ellipse.RenderTransform>
+                    <RotateTransform x:Name="spinnerRotate"/>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever">
+                                <DoubleAnimation Storyboard.TargetName="spinnerRotate"
+                                               Storyboard.TargetProperty="Angle"
+                                               From="0" To="360"
+                                               Duration="0:0:1.2">
+                                    <DoubleAnimation.EasingFunction>
+                                        <CubicEase EasingMode="EaseInOut"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+        </Grid>
+    </ControlTemplate>
+
+</ResourceDictionary>

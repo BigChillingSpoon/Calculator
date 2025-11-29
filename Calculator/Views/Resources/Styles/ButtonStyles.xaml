@@ -6,11 +6,10 @@
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Margin" Value="2"/>
-        <Setter Property="Background" Value="#2D2D30"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderBrush" Value="#3E3E42"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{StaticResource DarkGrayBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -30,17 +29,14 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#3E3E42"/>
-                            <Setter TargetName="border" Property="BorderBrush" Value="#4E4E52"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DarkGrayHoverBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#1E1E1E"/>
-                            <Setter TargetName="border" Property="BorderBrush" Value="#2E2E32"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DarkGrayPressedBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Background" Value="#252526"/>
-                            <Setter TargetName="border" Property="BorderBrush" Value="#2E2E32"/>
-                            <Setter Property="Foreground" Value="#666666"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DisabledButtonBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledTextBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -53,12 +49,11 @@
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Padding" Value="12,6"/>
-        <Setter Property="Background" Value="#0E639C"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderBrush" Value="#0E639C"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{StaticResource AccentBlueBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinWidth" Value="70"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -78,17 +73,14 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#1177BB"/>
-                            <Setter TargetName="border" Property="BorderBrush" Value="#1177BB"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AccentBlueHoverBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#0D5A8F"/>
-                            <Setter TargetName="border" Property="BorderBrush" Value="#0D5A8F"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AccentBluePressedBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Background" Value="#3E3E42"/>
-                            <Setter TargetName="border" Property="BorderBrush" Value="#3E3E42"/>
-                            <Setter Property="Foreground" Value="#888888"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DisabledButtonBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledTextBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -96,14 +88,13 @@
         </Setter>
     </Style>
 
-    <!-- Style pro tlačítko Evaluate From File -->
+    <!-- EVALUATE FROM FILE BUTTON STYLE-->
     <Style x:Key="EvaluateFromFileButtonStyle" TargetType="Button">
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Padding" Value="12,10"/>
-        <Setter Property="Background" Value="#16825D"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderBrush" Value="#16825D"/>
+        <Setter Property="Background" Value="{StaticResource AccentBlueBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
@@ -125,14 +116,14 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#1A9870"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AccentBlueHoverBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#126B4A"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AccentBluePressedBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Background" Value="#3E3E42"/>
-                            <Setter Property="Foreground" Value="#888888"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DisabledButtonBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledTextBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -140,9 +131,9 @@
         </Setter>
     </Style>
 
-    <!-- Style pro speciální tlačítka (Clear, Backspace) -->
+    <!-- SPECIAL OPERATION BUTTON STYLE-->
     <Style x:Key="SpecialCalculatorButtonStyle" TargetType="Button" BasedOn="{StaticResource CalculatorButtonStyle}">
-        <Setter Property="Background" Value="#3E3E42"/>
+        <Setter Property="Background" Value="{StaticResource AccentGrayBrush }"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -162,14 +153,14 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#4E4E52"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AccentGrayHoverBrush }"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#2E2E32"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AccentGrayPressedBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Background" Value="#252526"/>
-                            <Setter Property="Foreground" Value="#666666"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DisabledButtonBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DisabledTextBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -179,7 +170,7 @@
 
     <!-- Style pro operační tlačítka (+, -, *, /, =) -->
     <Style x:Key="OperatorButtonStyle" TargetType="Button" BasedOn="{StaticResource CalculatorButtonStyle}">
-        <Setter Property="Background" Value="#0E639C"/>
+        <Setter Property="Background" Value="{StaticResource AccentBlueBrush}"/>
         <Setter Property="FontSize" Value="24"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -200,14 +191,14 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#1177BB"/>
+                            <Setter TargetName="border" Property="Background" Value ="{StaticResource AccentBlueHoverBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#0D5A8F"/>
+                            <Setter TargetName="border" Property="Background" Value ="{StaticResource AccentBluePressedBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Background" Value="#252526"/>
-                            <Setter Property="Foreground" Value="#666666"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DisabledButtonBrush}"/>
+                            <Setter Property="Foreground" Value ="{StaticResource DisabledTextBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

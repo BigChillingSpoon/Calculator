@@ -8,6 +8,8 @@
 
                 <!-- STRING RESOURCES -->
                 <ResourceDictionary Source="Views/Resources/CommonStringDictionary.xaml"/>
+                <!--COLORS-->
+                <ResourceDictionary Source="Views/Resources/Styles/Colors.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>        
         </ResourceDictionary>
