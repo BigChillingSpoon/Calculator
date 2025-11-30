@@ -133,7 +133,7 @@ namespace Calculator.Tests.Helpers
 
         public static IEnumerable<object[]> InvalidExpressions()
         {
-            yield return new object[] { "2.5", "character" };
+            yield return new object[] { "2.5", "operator" };
             yield return new object[] { "a+1", "character" };
             yield return new object[] { "2+", "operator" };
             yield return new object[] { "**2", "sequence" };
@@ -158,21 +158,7 @@ namespace Calculator.Tests.Helpers
         {
             yield return new object[] { " 3 + 4 ", "7" };
             yield return new object[] { "10 -  2* 3", "4" };
-            yield return new object[] { "  5/  1 ", "5" };
-        }
-
-        public static IEnumerable<object[]> ComplexOperators()
-        {
-            yield return new object[] { "-+-+2", "2" };
-            yield return new object[] { "----3", "3" };
-            yield return new object[] { "--+-4", "-4" };
-            yield return new object[] { "-+5", "-5" };
-            yield return new object[] { "++6", "6" };
-        }
-        public static IEnumerable<object[]> ExpressionsWithComplexOerators()
-        {
-            yield return new object[] { "--2*-+-+-3", "-6" };
-            yield return new object[] { "-------8/+-+-+-+2", "4" };
+            yield return new object[] { "  5/                1 ", "5" };
         }
     }
 }

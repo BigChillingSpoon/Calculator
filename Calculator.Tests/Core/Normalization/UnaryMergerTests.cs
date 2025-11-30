@@ -8,10 +8,12 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Calculator.Core;
+using Calculator.Core.Interfaces;
+using Calculator.Tests.Helpers;
 
 namespace Calculator.Tests.Core.Normalization
 {
-    public class UnaryMergerTests 
+    public class UnaryMergerTests
     {
         private readonly UnaryMerger _unaryMerger;
         public UnaryMergerTests()
@@ -79,6 +81,5 @@ namespace Calculator.Tests.Core.Normalization
             var third = Assert.IsType<NumericToken>(result[2]);
             Assert.Equal(new BigInteger(-3), third.NumericValue);
         }
-
     }
 }
