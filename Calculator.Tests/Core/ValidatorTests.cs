@@ -167,7 +167,7 @@ namespace Calculator.Core.Tests
         #endregion
 
         #region Operator Sequences
-        [Fact]// only sequence that is okay is combination of addition an substraction 
+        [Fact] // no sequence of operators is allowed
         public void Validate_TwoSignOperatorsInRow_Fails()
         {
             // Arrange
@@ -183,10 +183,10 @@ namespace Calculator.Core.Tests
             var result = _validator.ValidateExpression(tokens);
 
             // Assert
-            TestHelpers.AssertSuccess(result);
+            TestHelpers.AssertFailure(result);
         }
 
-        [Fact]// only sequence that is okay is combination of addition an substraction 
+        [Fact] // no sequence of operators is allowed
         public void Validate_TwoMultiplicationInRow_Fails()
         {
             // Arrange
