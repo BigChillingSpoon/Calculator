@@ -2,17 +2,17 @@
 
 This project is a fully integer-based calculator supporting:
 
-Classic operations: + - * /
+- Classic operations: + - * /
 
-Unary operators and sign handling
+- Unary operators and sign handling
 
-BigInteger arithmetic (unlimited number size)
+- BigInteger arithmetic (unlimited number size)
 
-Operator precedence (× and ÷ before + and -)
+- Operator precedence (× and ÷ before + and -)
 
-Detailed error reporting
+- Detailed error reporting
 
-Async batch file processing for large files (10GB+)
+- Async batch file processing for large files (10GB+)
 
 It is built as a portfolio-quality project showcasing clean architectural design, separation of concerns, WPF UI work, and production-level error handling.
 
