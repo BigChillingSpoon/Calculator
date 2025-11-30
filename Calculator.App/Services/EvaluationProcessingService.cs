@@ -19,7 +19,7 @@ namespace Calculator.AppLayer.Services
         }
 
         public ProcessResult ProcessEvaluation(string expression)
-        {
+        { 
             var parsingResult = _expressionEvaluator.Evaluate(expression);
             return new ProcessResult
             {

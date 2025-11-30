@@ -66,16 +66,6 @@ namespace Calculator.Core.Services
                     ErrorType = ErrorTypeCore.Error
                 };
             }
-            catch (Exception ex)
-            {
-                //TODO log here - this is unexpected
-                return new ParsingResult
-                {
-                    Success = false,
-                    ErrorMessage = $"Error during evaluation, check logs.",
-                    ErrorType = ErrorTypeCore.Error
-                };
-            }
         }
     }
 }

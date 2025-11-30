@@ -10,6 +10,6 @@ namespace Calculator.Core.Models.Interfaces
     public interface IExpressionToken
     {
         public ExpressionTokenType TokenType { get; }
-        public string RawValue { get; set; }
+        public string RawValue { get; }
     }
 }

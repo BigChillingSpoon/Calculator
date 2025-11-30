@@ -23,18 +23,23 @@ namespace Calculator.Extensions.Commands
             return _canExecute?.Invoke() ?? true;
         }
 
-        // Hook into WPF's CommandManager for automatic CanExecute updates
         public event EventHandler? CanExecuteChanged
         {
             add
             {
-                CommandManager.RequerySuggested += value;
-                _canExecuteChanged += value;
+                if (value != null)
+                {
+                    CommandManager.RequerySuggested += value;
+                    _canExecuteChanged += value;
+                }
             }
             remove
             {
-                CommandManager.RequerySuggested -= value;
-                _canExecuteChanged -= value;
+                if (value != null)
+                {
+                    CommandManager.RequerySuggested -= value;
+                    _canExecuteChanged -= value;
+                }
             }
         }
 

@@ -34,32 +34,11 @@ namespace Calculator
         {
             var services = new ServiceCollection();
 
-            //WPF
-            services.AddTransient<INotifyService, NotifyService>();
-            services.AddTransient<IDialogService, DialogService>();
-
-            //APPLAYER
-            services.AddSingleton<IFileProcessingService, FileProcessingService>();
-            services.AddSingleton<IEvaluationProcessingService, EvaluationProcessingService>(); 
-            services.AddSingleton<IUserFileInputValidator, UserFileInputValidator>();
-
-            // CORE - TODO presunout do extensionu v core
-            services.AddSingleton<IExpressionEvaluationService, ExpressionEvaluationService>();
-            services.AddSingleton<IExpressionValidator, ExpressionValidator>();
-            services.AddSingleton<IExpressionTokenizer, ExpressionTokenizer>();
-            services.AddSingleton<IExpressionEvaluator, ExpressionEvaluator>();
-            services.AddSingleton<IExpressionNormalizer, ExpressionNormalizer>();
-            services.AddSingleton<ISignNormalizer, SignNormalizer>();
-            services.AddSingleton<IUnaryMerger, UnaryMerger>();
-            services.AddSingleton<IUnaryClassifier, UnaryClassifier>();
-            //IO 
-            services.AddSingleton<IFileService, FileService>();
-            
-            //VM
-            services.AddTransient<MainViewModel>();
-
-            //WINDOW
-            services.AddTransient<MainWindow>();
+            services
+                .AddPresentationServices()
+                .AddApplicationServices()
+                .AddCoreServices()
+                .AddInfrastructureServices();
 
             return services.BuildServiceProvider();
         }

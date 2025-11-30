@@ -10,6 +10,7 @@ using Calculator.AppLayer.Interfaces;
 using Calculator.Core.Models.Enums;
 using Calculator.AppLayer.Models.Enums;
 using Calculator.Extensions.Commands;
+using Calculator.AppLayer.Models;
 
 namespace Calculator.ViewModels
 {
@@ -25,6 +26,19 @@ namespace Calculator.ViewModels
         #region Constructors
         public MainViewModel(IEvaluationProcessingService evaluationProcessingService, INotifyService notifyService, IDialogService dialogService, IFileProcessingService fileProcessingService)
         {
+            // Initialize properties
+            _input = string.Empty;
+            _currentExpression = string.Empty;
+            _inputFilePath = string.Empty;
+            _outputDirectory = string.Empty;
+            _outputFileName = string.Empty;
+
+            // Initialize services
+            _evaluationProcessingService = evaluationProcessingService;
+            _notifyService = notifyService;
+            _dialogService = dialogService;
+            _fileProcessingService = fileProcessingService;
+
             // Initialize commands
             EvaluateCommand = new RelayCommand(OnEvaluateExpression, _ => !IsBusy && !string.IsNullOrWhiteSpace(Input));
             ClearCommand = new RelayCommand(OnClear, _ => !IsBusy);
@@ -34,13 +48,6 @@ namespace Calculator.ViewModels
             SelectInputFileCommand = new AsyncRelayCommand(OnSelectInputFileAsync, () => !IsBusy);
             SelectOutputDirectoryCommand = new AsyncRelayCommand(OnSelectOutputDirectory, () => !IsBusy);
             EvaluateFromFileCommand = new AsyncRelayCommand(OnEvaluateFromFileAsync, CanEvaluateFromFile);
-
-            // Initialize properties
-            _input = string.Empty;
-            _evaluationProcessingService = evaluationProcessingService;
-            _notifyService = notifyService;
-            _dialogService = dialogService;
-            _fileProcessingService = fileProcessingService;
         }
         #endregion Constructors
 
@@ -100,28 +107,17 @@ namespace Calculator.ViewModels
                 return;
 
             IsBusy = true;
+            var result = _evaluationProcessingService.ProcessEvaluation(_input);
 
-            try
+            if (result.Success)
             {
-                var result = _evaluationProcessingService.ProcessEvaluation(_input);
+                CurrentExpression = _input;
+                Input = result.Value.ToString();
+            }
+            else
+                HandleEvaluationError(result);
 
-                if (result.Success)
-                {
-                    CurrentExpression = _input;
-                    Input = result.Value.ToString();
-                }
-                else
-                    HandleEvaluationError(result);
-            }
-            catch (Exception ex)
-            {
-                Input = "Error";
-                _notifyService.ShowError($"Unexpected error: {ex.Message}");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            IsBusy = false;
         }
 
         private void OnClear(object parameter)
@@ -218,23 +214,13 @@ namespace Calculator.ViewModels
 
             IsBusy = true;
 
-            try
-            {
-                var processResult = await _fileProcessingService.ProcessEvaluationFromFileAsync(InputFilePath, OutputDirectory, OutputFileName);
+            var processResult = await _fileProcessingService.ProcessEvaluationFromFileAsync(InputFilePath, OutputDirectory, OutputFileName);
 
-                if (processResult.Success)
-                    _notifyService.ShowInfo("File processed successfully. Check output directory for results.");
-                else
-                    HandleProcessingError(processResult);
-            }
-            catch (Exception ex)
-            {
-                _notifyService.ShowError($"Error processing file: {ex.Message}");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            if (processResult.Success)
+                _notifyService.ShowInfo("File processed successfully. Check output directory for results.");
+            else
+                HandleProcessingError(processResult);
+            IsBusy = false;
         }
 
         private bool CanEvaluateFromFile()
@@ -246,7 +232,7 @@ namespace Calculator.ViewModels
         #endregion Command Handlers
 
         #region Helper Methods
-        private void HandleEvaluationError(dynamic result)
+        private void HandleEvaluationError(ProcessResult result)
         {
             if (result.ErrorType == ErrorType.Error)
             {
