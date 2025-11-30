@@ -19,7 +19,7 @@ namespace Calculator.Core
                 return new ParsingResult
                 {
                     Success = false,
-                    ErrorMessage = "Expression is empty",
+                    ErrorMessage = "Invalid Expression: Expression is empty",
                     ErrorType = ErrorTypeCore.Error
                 };
             }
@@ -83,7 +83,7 @@ namespace Calculator.Core
                                     return new ParsingResult
                                     {
                                         Success = false,
-                                        ErrorMessage = "Division by zero is not allowed",
+                                        ErrorMessage = "Invalid Expression: Division by zero is not allowed",
                                         ErrorType = ErrorTypeCore.Error
                                     };
                                 }

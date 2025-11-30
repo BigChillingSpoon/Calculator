@@ -13,6 +13,7 @@ using Calculator.AppLayer.Services;
 using Calculator.AppLayer.Interfaces;
 using Calculator.Extensions;
 using Calculator.Core.Services;
+using Calculator.AppLayer.Validators;
 
 namespace Calculator
 {
@@ -40,6 +41,7 @@ namespace Calculator
             //APPLAYER
             services.AddSingleton<IFileProcessingService, FileProcessingService>();
             services.AddSingleton<IEvaluationProcessingService, EvaluationProcessingService>(); 
+            services.AddSingleton<IUserFileInputValidator, UserFileInputValidator>();
 
             // CORE - TODO presunout do extensionu v core
             services.AddSingleton<IExpressionEvaluationService, ExpressionEvaluationService>();

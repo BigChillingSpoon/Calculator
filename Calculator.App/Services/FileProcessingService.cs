@@ -5,9 +5,7 @@ using Calculator.Core.Interfaces;
 using Calculator.IO.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Calculator.AppLayer.Services
@@ -16,32 +14,49 @@ namespace Calculator.AppLayer.Services
     {
         private readonly IFileService _fileService;
         private readonly IExpressionEvaluationService _expressionEvaluator;
-        public FileProcessingService(IFileService fileService, IExpressionEvaluationService expressionEvaluator)
+        private readonly IUserFileInputValidator _inputValidator;
+
+        public FileProcessingService(IFileService fileService, IExpressionEvaluationService expressionEvaluator, IUserFileInputValidator inputValidator)
         {
             _fileService = fileService;
             _expressionEvaluator = expressionEvaluator;
+            _inputValidator = inputValidator;
         }
 
-        public async Task<ProcessResult> ProcessEvaluationFromFileAsync(string inputFilePath, string outputDirectoryPath, string outputFileName)
+        public async Task<ProcessResult> ProcessEvaluationFromFileAsync( string inputFilePath, string outputDirectoryPath, string outputFileName)
         {
-            var validationResult = ProcessUserInputs(inputFilePath, outputDirectoryPath);
-            if (!validationResult.Success)
-                return validationResult;
+            // validate input values
+            var validation = _inputValidator.ProcessUserFileInputs(inputFilePath, outputDirectoryPath);
+            if (!validation.Success)
+                return validation;
 
-            var outputLines = new List<string>();
+            // prepare output filename
+            outputFileName = PrepareOutputFileName(outputFileName);
+
             try
             {
+                // lazily read lines from input file
+                var outputLines = new List<string>();
+
                 await foreach (var line in _fileService.GetFileLinesAsync(inputFilePath))
                 {
-                    if(string.IsNullOrEmpty(line))
-                        continue;//ignoration of empty lines
-                    
-                    var evaluationResult = _expressionEvaluator.Evaluate(line);
-                    var evaluationOutput = evaluationResult.Success ? evaluationResult.Value.ToString() : evaluationResult.ErrorMessage;
-                    outputLines.Add(evaluationOutput);
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+
+                    var evaluation = _expressionEvaluator.Evaluate(line);
+
+                    string output = evaluation.Success
+                        ? evaluation.Value
+                        : evaluation.ErrorMessage;
+
+                    outputLines.Add(output);
                 }
 
-                await _fileService.SaveLinesToDirectoryAsync(outputDirectoryPath, outputLines);
+                // let IO layer write the full content
+                await _fileService.SaveLinesToDirectoryAsync(
+                    outputDirectoryPath,
+                    outputLines,
+                    outputFileName);
 
                 return new ProcessResult
                 {
@@ -54,82 +69,34 @@ namespace Calculator.AppLayer.Services
                 return HandleException(ex);
             }
         }
-
-        private bool IsTxtFile(string inputFilePath)
+        private string PrepareOutputFileName(string name)
         {
-            return inputFilePath.EndsWith(".txt", StringComparison.OrdinalIgnoreCase);
+            if (string.IsNullOrWhiteSpace(name))
+                return $"Output_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+
+            if (!name.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+                name += ".txt";
+
+            return name;
         }
 
-        private ProcessResult ProcessUserInputs(string inputPath, string outputPath)
-        {
-            if (string.IsNullOrWhiteSpace(inputPath))
-            {
-                return new ProcessResult
-                {
-                    Success = false,
-                    ErrorMessage = "Input file path is empty",
-                    ErrorType = ErrorType.Warning
-                };
-            }
 
-            if(!IsTxtFile(inputPath))
-            {
-                return new ProcessResult
-                {
-                    Success = false,
-                    ErrorMessage = "Input file must be a .txt file",
-                    ErrorType = ErrorType.Warning
-                };
-            }
+        #region ErrorHandling
 
-            if (string.IsNullOrWhiteSpace(outputPath))
+        private ProcessResult HandleException(Exception ex) =>
+            ex switch
             {
-                return new ProcessResult
-                {
-                    Success = false,
-                    ErrorMessage = "Output directory path is empty",
-                    ErrorType = ErrorType.Warning
-                };
-            }
-
-            return new ProcessResult
-            {
-                Success = true,
-                ErrorType = ErrorType.None
+                FileNotFoundException => Fail("Input file not found", ErrorType.Error),
+                UnauthorizedAccessException => Fail("Access denied to the file system", ErrorType.Error),
+                IOException io => Fail($"IO error: {io.Message}", ErrorType.Error),
+                _ => Fail($"Unexpected error: {ex.Message}", ErrorType.Error)
             };
-        }
-        private ProcessResult HandleException(Exception ex)
-        {
-            return ex switch
-            {
-                FileNotFoundException => new ProcessResult
-                {
-                    Success = false,
-                    ErrorMessage = "Input file not found",
-                    ErrorType = ErrorType.Error
-                },
 
-                UnauthorizedAccessException => new ProcessResult
-                {
-                    Success = false,
-                    ErrorMessage = "Access denied to file",
-                    ErrorType = ErrorType.Error
-                },
+        private ProcessResult Fail(string message, ErrorType type)
+            => new ProcessResult { Success = false, ErrorMessage = message, ErrorType = type };
 
-                IOException ioEx => new ProcessResult
-                {
-                    Success = false,
-                    ErrorMessage = $"IO error: {ioEx.Message}",
-                    ErrorType = ErrorType.Error
-                },
-
-                _ => new ProcessResult
-                {
-                    Success = false,
-                    ErrorMessage = $"Unexpected error: {ex.Message}",
-                    ErrorType = ErrorType.Error
-                }
-            };
-        }
+        private ProcessResult Success()
+            => new ProcessResult { Success = true, ErrorType = ErrorType.None };
+        #endregion ErrorHandling
     }
 }

@@ -23,12 +23,14 @@ namespace Calculator.IO.Services
             }
         }
 
-        public async Task SaveLinesToDirectoryAsync(string directoryPath, IEnumerable<string> lines)
+        public async Task SaveLinesToDirectoryAsync(string directoryPath, IEnumerable<string> lines, string ouputFileName)
         {
             if (!Directory.Exists(directoryPath))
                 throw new DirectoryNotFoundException($"Output directory not found: {directoryPath}");
-
-            var outputFilePath = Path.Combine(directoryPath, $"Output_{DateTime.Now:yyyyMMdd_HHmmss}.txt");
+            if (string.IsNullOrWhiteSpace(ouputFileName))
+                throw new ArgumentException("Output file name cannot be null or whitespace.", nameof(ouputFileName));
+            
+            var outputFilePath = Path.Combine(directoryPath, ouputFileName);
 
             await using var writer = new StreamWriter(
                 new FileStream(
