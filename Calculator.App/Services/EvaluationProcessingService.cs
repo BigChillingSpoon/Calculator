@@ -1,5 +1,5 @@
 ﻿using Calculator.AppLayer.Models;
-using Calculator.AppLayer.Services.Interfaces;
+using Calculator.AppLayer.Interfaces;
 using Calculator.Core.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,8 +12,8 @@ namespace Calculator.AppLayer.Services
 {
     public class EvaluationProcessingService : IEvaluationProcessingService
     {
-        private readonly IExpressionEvaluator _expressionEvaluator;
-        public EvaluationProcessingService(IExpressionEvaluator expressionEvaluator)
+        private readonly IExpressionEvaluationService _expressionEvaluator;
+        public EvaluationProcessingService(IExpressionEvaluationService expressionEvaluator)
         {
             _expressionEvaluator = expressionEvaluator;
         }

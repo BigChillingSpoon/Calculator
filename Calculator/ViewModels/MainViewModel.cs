@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Calculator.Core.Interfaces;
 using Calculator.Services.Interfaces;
-using Calculator.AppLayer.Services.Interfaces;
+using Calculator.AppLayer.Interfaces;
 using Calculator.Core.Models.Enums;
 using Calculator.AppLayer.Models.Enums;
 using Calculator.Extensions.Commands;

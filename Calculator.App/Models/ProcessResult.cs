@@ -10,8 +10,8 @@ namespace Calculator.AppLayer.Models
     public class ProcessResult
     {
         public bool Success { get; set; }
-        public double Value { get; set; } 
-        public string ErrorMessage { get; set; } = String.Empty;
+        public string Value { get; set; } = string.Empty;
+        public string ErrorMessage { get; set; } = string.Empty;
         public ErrorType ErrorType { get; set; } = ErrorType.None;
     }
 }

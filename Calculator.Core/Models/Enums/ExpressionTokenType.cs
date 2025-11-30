@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calculator.IO.Extensions
+namespace Calculator.Core.Models.Enums
 {
-    internal class IOServiceExtension
+    public enum ExpressionTokenType
     {
+        Number,
+        Operator,
+        Unknown
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calculator.AppLayer.Services.Interfaces
+namespace Calculator.AppLayer.Interfaces
 {
     public interface IEvaluationProcessingService
     {

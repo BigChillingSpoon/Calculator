@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Calculator.Core.Interfaces
 {
-    public interface IExpressionValidator
+    public interface IExpressionNormalizer
     {
-        public ParsingResult ValidateExpression(List<IExpressionToken> expressionTokens);
+        public ParsingResult NormalizeExpression(List<IExpressionToken> expressionTokens);
     }
 }

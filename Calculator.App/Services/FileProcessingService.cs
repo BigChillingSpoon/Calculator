@@ -1,6 +1,6 @@
 ﻿using Calculator.AppLayer.Models;
 using Calculator.AppLayer.Models.Enums;
-using Calculator.AppLayer.Services.Interfaces;
+using Calculator.AppLayer.Interfaces;
 using Calculator.Core.Interfaces;
 using Calculator.IO.Services.Interfaces;
 using System;
@@ -15,8 +15,8 @@ namespace Calculator.AppLayer.Services
     public class FileProcessingService : IFileProcessingService
     {
         private readonly IFileService _fileService;
-        private readonly IExpressionEvaluator _expressionEvaluator;
-        public FileProcessingService(IFileService fileService, IExpressionEvaluator expressionEvaluator)
+        private readonly IExpressionEvaluationService _expressionEvaluator;
+        public FileProcessingService(IFileService fileService, IExpressionEvaluationService expressionEvaluator)
         {
             _fileService = fileService;
             _expressionEvaluator = expressionEvaluator;

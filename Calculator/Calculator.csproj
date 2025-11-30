@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Calculator.App\Calculator.AppLayer.csproj" />
   </ItemGroup>
 

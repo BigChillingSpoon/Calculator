@@ -10,8 +10,9 @@ using Calculator.Services;
 using Calculator.IO.Services.Interfaces;
 using Calculator.IO.Services;
 using Calculator.AppLayer.Services;
-using Calculator.AppLayer.Services.Interfaces;
+using Calculator.AppLayer.Interfaces;
 using Calculator.Extensions;
+using Calculator.Core.Services;
 
 namespace Calculator
 {
@@ -41,9 +42,14 @@ namespace Calculator
             services.AddSingleton<IEvaluationProcessingService, EvaluationProcessingService>(); 
 
             // CORE - TODO presunout do extensionu v core
-            services.AddSingleton<IExpressionEvaluator, ExpressionEvaluator>();
+            services.AddSingleton<IExpressionEvaluationService, ExpressionEvaluationService>();
             services.AddSingleton<IExpressionValidator, ExpressionValidator>();
-
+            services.AddSingleton<IExpressionTokenizer, ExpressionTokenizer>();
+            services.AddSingleton<IExpressionEvaluator, ExpressionEvaluator>();
+            services.AddSingleton<IExpressionNormalizer, ExpressionNormalizer>();
+            services.AddSingleton<ISignNormalizer, SignNormalizer>();
+            services.AddSingleton<IUnaryMerger, UnaryMerger>();
+            services.AddSingleton<IUnaryClassifier, UnaryClassifier>();
             //IO 
             services.AddSingleton<IFileService, FileService>();
             
