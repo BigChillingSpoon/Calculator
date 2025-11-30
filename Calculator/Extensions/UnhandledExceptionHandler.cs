@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,14 +35,31 @@ namespace Calculator.Extensions
 
         private static void Handle(Exception? ex)
         {
-            // TODO: LOG
-            // TODO: Show custom dialog
-
+            Log(ex);
+           
             MessageBox.Show(
-                ex?.Message ?? "Unknown critical error",
+                "Unknown critical error",
                 "Unexpected Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
+        }
+
+        private static void Log(Exception? ex)
+        {
+            try
+            {
+                var tempPath = Path.Combine(
+                    Path.GetTempPath(),
+                    "Calculator_crash.log"); // we dont have to create unique name here
+
+                File.AppendAllText(
+                    tempPath,
+                    $"{DateTime.Now}: {ex}\n\n");
+            }
+            catch
+            {
+                // We do not log logger errors ever.
+            }
         }
     }
 }
