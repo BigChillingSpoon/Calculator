@@ -14,6 +14,14 @@ namespace Calculator.Core
 {
     public class UnaryMerger : IUnaryMerger
     {
+        /// <summary>
+        /// Merges all unary operators with their corresponding numeric tokens.
+        /// Unary operators are of two types: unary plus (+) and unary minus (-).
+        /// All unary operators are marked as UnaryOperatorToken.
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <returns>Tokenized expression</returns>
+        /// <exception cref="InvalidUnaryPlacementException"></exception>
         public List<IExpressionToken> MergeUnaryOperators(List<IExpressionToken> tokens)
         {
             var output = new List<IExpressionToken>();

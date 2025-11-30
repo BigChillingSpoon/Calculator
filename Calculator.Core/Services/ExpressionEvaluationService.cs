@@ -27,14 +27,13 @@ namespace Calculator.Core.Services
 
         public ParsingResult Evaluate(string expression)
         {
+            //tokenize -> normalize -> validate -> compute
             try
             {
-                //tokenize -> normalize -> validate -> compute
-                //provadi ciste tokenizaci - pokud najde neznamy operator nebo nepodporovany znak, vyhodi vyjimku
+                // does only tokenization - if it finds unknown operator or unsupported character, throws exception
                 var tokenizedExpression = _expressionTokenizer.Tokenize(expression);
 
-                //normalizuje sekvence operatoru (jednoduche pravidla - napr. -- -> +, +- -> - atd.) pokud najde nejakou nevalidni sekvenci tak vrati parsing result unsucesfull
-                //stara se o lexikalni spravnost vyrazu
+                //normalizes sequences of operators (simple rules - e.g. -- -> +, +- -> - etc.) if it finds any invalid sequence it returns parsing result unsucesfull
                 var normalizationResult = _expressionNormalizer.NormalizeExpression(tokenizedExpression);
                 if(!normalizationResult.Success)
                     return normalizationResult;

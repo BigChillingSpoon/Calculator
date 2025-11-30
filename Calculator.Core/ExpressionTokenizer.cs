@@ -13,6 +13,14 @@ namespace Calculator.Core
 {
     public class ExpressionTokenizer : IExpressionTokenizer
     {
+        /// <summary>
+        /// Tokenizes the input expression string into a list of expression tokens.
+        /// Expression tokens are of type 
+        /// <typeparamref name="IExpressionToken"/> (NumericToken, OperatorToken).
+        /// </summary>
+        /// <param name="expression">string expression</param>
+        /// <returns>Tokenized expression</returns>
+        /// <exception cref="UnsupportedCharacterException">/exception>
         public List<IExpressionToken> Tokenize(string expression)
         {
             List<IExpressionToken> tokens = new List<IExpressionToken>();

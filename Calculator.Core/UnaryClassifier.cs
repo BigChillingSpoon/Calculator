@@ -11,7 +11,13 @@ using System.Threading.Tasks;
 namespace Calculator.Core
 {
     public class UnaryClassifier : IUnaryClassifier
-    {
+    {     
+        /// <summary>
+        /// Classifies operator tokens to either UnaryOperatorToken or BinaryOperatorToken subclass
+        /// All expression tokens of type NumericToken are kept as they are
+        /// </summary>
+        /// <param name="expressionTokens"></param>
+        /// <returns>Tokenized expression with classification of operators/returns>
         public List<IExpressionToken> ClassifyUnaryOperators(List<IExpressionToken> expressionTokens)
         {
             var output = new List<IExpressionToken>();

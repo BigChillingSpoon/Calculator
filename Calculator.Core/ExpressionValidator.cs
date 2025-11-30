@@ -13,6 +13,11 @@ namespace Calculator.Core
 {
     public class ExpressionValidator : IExpressionValidator
     {
+        /// <summary>
+        /// Decides which expressions are valid and which are not, based on syntax rules
+        /// </summary>
+        /// <param name="expressionTokens"></param>
+        /// <returns>ParsingResult</returns>
         public ParsingResult ValidateExpression(List<IExpressionToken> expressionTokens)
         {
             if (expressionTokens == null || !expressionTokens.Any())
@@ -51,63 +56,21 @@ namespace Calculator.Core
             };
         }
 
+        /// <summary>
+        /// Checks if the token list contains invalid sequences of operators (e.g., two operators in a row).
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <returns>If contains returns true, otherwise returns false</returns>
         private bool ContainsInvalidSequenceOfOperators(List<IExpressionToken> tokens)
         {
             for (int i = 0; i < tokens.Count - 1; i++)
             {
                 if (tokens[i] is OperatorToken firstOperator && tokens[i + 1] is OperatorToken secondOperator)
                 {
-                    return !IsOperatorSequenceValid(firstOperator, secondOperator);
+                    return true;
                 }
             }
             return false;
-        }
-
-        private bool IsOperatorSequenceValid(OperatorToken firstOperator, OperatorToken secondOperator)
-        {
-            var prevType = firstOperator.OperationType;
-            var nextType = secondOperator.OperationType;
-
-            bool prevIsSign = prevType == OperationType.Addition || prevType == OperationType.Subtraction;
-            bool nextIsSign = nextType == OperationType.Addition || nextType == OperationType.Subtraction;
-
-            //
-            // Should be handled by normalizer, if not so, we handle it here
-            //
-            if (prevIsSign && nextIsSign)
-                return true;
-
-            //
-            // 2) Binary operator followed by unary minus: OK
-            //    * - -> VALID
-            //    / - -> VALID
-            //
-            if (!prevIsSign && nextIsSign && nextType == OperationType.Subtraction)
-                return true;
-
-            //
-            // Binary operator followed by unary plus, should be as well handled by normalizer, but if not so, we handle it here
-            //
-            if (!prevIsSign && nextIsSign && nextType == OperationType.Addition)
-                return true;
-
-            //
-            // 4) Unary operator (- or +) cannot be followed by * or /
-            //    - *   -> NON VALID
-            //    + /   -> NON VALID
-            //
-            if (prevIsSign && !nextIsSign)
-                return false;
-
-            //
-            // 5) Binary operator cannot follow another binary operator
-            //    * * -> NON VALID
-            //    / * -> NON VALID
-            //
-            if (!prevIsSign && !nextIsSign)
-                return false;
-
-            return true;
         }
 
     }

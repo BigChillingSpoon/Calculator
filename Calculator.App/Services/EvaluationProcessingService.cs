@@ -17,7 +17,12 @@ namespace Calculator.AppLayer.Services
         {
             _expressionEvaluator = expressionEvaluator;
         }
-
+        /// <summary>
+        /// Processes evaluation of a single expression.
+        /// All unexpected exceptions are handled in upper layers of application.
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns>ProcessResult based on parsing result values.</returns>
         public ProcessResult ProcessEvaluation(string expression)
         { 
             var parsingResult = _expressionEvaluator.Evaluate(expression);

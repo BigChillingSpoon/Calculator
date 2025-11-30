@@ -12,6 +12,12 @@ namespace Calculator.Core
 {
     public class SignNormalizer : ISignNormalizer
     {
+        /// <summary>
+        /// Transforms sequence of sign operators(+,-) into just one sign operator for example --3 is normalized to +3
+        /// Does not normalize other operators such as * or /
+        /// </summary>
+        /// <param name="expressionTokens"></param>
+        /// <returns>Tokenized expression with normalized sign operators</returns>
         public List<IExpressionToken> NormalizeSigns(List<IExpressionToken> expressionTokens)
         {
             var normalizedTokens = new List<IExpressionToken>();

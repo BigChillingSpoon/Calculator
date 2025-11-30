@@ -15,14 +15,20 @@ namespace Calculator.AppLayer.Services
         private readonly IFileService _fileService;
         private readonly IExpressionEvaluationService _expressionEvaluator;
         private readonly IUserFileInputValidator _inputValidator;
-
+        private const string DefaultFileExtension = ".txt";
         public FileProcessingService(IFileService fileService, IExpressionEvaluationService expressionEvaluator, IUserFileInputValidator inputValidator)
         {
             _fileService = fileService;
             _expressionEvaluator = expressionEvaluator;
             _inputValidator = inputValidator;
         }
-
+        /// <summary>
+        /// Processes evaluation of expressions from an input file and saves the results to an output file in the specified directory.
+        /// </summary>
+        /// <param name="inputFilePath"></param>
+        /// <param name="outputDirectoryPath"></param>
+        /// <param name="outputFileName"></param>
+        /// <returns>ProcessResult success whether all evaluations were done, otherwise returns faliure with user friendly message.</returns>
         public async Task<ProcessResult> ProcessEvaluationFromFileAsync( string inputFilePath, string outputDirectoryPath, string outputFileName)
         {
             // validate input values
@@ -45,9 +51,7 @@ namespace Calculator.AppLayer.Services
 
                     var evaluation = _expressionEvaluator.Evaluate(line);
 
-                    string output = evaluation.Success
-                        ? evaluation.Value
-                        : evaluation.ErrorMessage;
+                    string output = evaluation.Success ? evaluation.Value : evaluation.ErrorMessage;
 
                     outputLines.Add(output);
                 }
@@ -58,45 +62,37 @@ namespace Calculator.AppLayer.Services
                     outputLines,
                     outputFileName);
 
-                return new ProcessResult
-                {
-                    Success = true,
-                    ErrorType = ErrorType.None
-                };
+                return Success();
             }
-            catch (Exception ex)
+            catch (FileNotFoundException ex)
             {
-                return HandleException(ex);
+                return Fail("Input file not found", ErrorType.Error);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Fail("Access denied to the file system", ErrorType.Error);
+            }
+            catch (IOException ioEx)
+            {
+                return Fail($"IO error: {ioEx.Message}", ErrorType.Error);
             }
         }
+
         private string PrepareOutputFileName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return $"Output_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+                return $"Output_{DateTime.Now:yyyyMMdd_HHmmss}{DefaultFileExtension}";
 
-            if (!name.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
-                name += ".txt";
+            if (!name.EndsWith(DefaultFileExtension, StringComparison.OrdinalIgnoreCase))
+                name += DefaultFileExtension;
 
             return name;
         }
-
-
-        #region ErrorHandling
-
-        private ProcessResult HandleException(Exception ex) =>
-            ex switch
-            {
-                FileNotFoundException => Fail("Input file not found", ErrorType.Error),
-                UnauthorizedAccessException => Fail("Access denied to the file system", ErrorType.Error),
-                IOException io => Fail($"IO error: {io.Message}", ErrorType.Error),
-                _ => Fail($"Unexpected error: {ex.Message}", ErrorType.Error)
-            };
-
+        
         private ProcessResult Fail(string message, ErrorType type)
             => new ProcessResult { Success = false, ErrorMessage = message, ErrorType = type };
 
         private ProcessResult Success()
             => new ProcessResult { Success = true, ErrorType = ErrorType.None };
-        #endregion ErrorHandling
     }
 }

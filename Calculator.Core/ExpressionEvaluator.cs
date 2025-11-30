@@ -10,6 +10,12 @@ namespace Calculator.Core
 {
     public class ExpressionEvaluator : IExpressionEvaluator
     {
+        /// <summary>
+        /// Evaluates a tokenized mathematical expression and returns the result. 
+        /// Value of calculated expression is returned as string in ParsingResult.Value.
+        /// </summary>
+        /// <param name="tokens">Tokenized expression</param>
+        /// <returns>Parsing result success with string value as result of an expression whether nomralization was sucessfull, otherwise returns failure with user friendly error messsage.</returns>
         public ParsingResult EvaluateExpression(List<IExpressionToken> tokens)
         {
             // this is already handled by validator, but to be sure that this code is well testable 

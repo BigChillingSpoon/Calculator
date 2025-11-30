@@ -9,7 +9,6 @@ namespace Calculator.Core.Models.Enums
     public enum ExpressionTokenType
     {
         Number,
-        Operator,
-        Unknown
+        Operator
     }
 }

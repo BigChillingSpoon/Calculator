@@ -13,6 +13,12 @@ namespace Calculator.AppLayer.Validators
 {
     public class UserFileInputValidator : IUserFileInputValidator
     {
+        /// <summary>
+        /// Validates user provided file paths for input and output.
+        /// </summary>
+        /// <param name="inputPath"></param>
+        /// <param name="outputPath"></param>
+        /// <returns>ProcessResult suceess whether both paths are valid, otherwise returns failure.</returns>
         public ProcessResult ProcessUserFileInputs(string inputPath, string outputPath)
         {
             if (string.IsNullOrWhiteSpace(inputPath))
@@ -73,7 +79,6 @@ namespace Calculator.AppLayer.Validators
                 return false;
             }
         }
-
 
         private ProcessResult Fail(string message, ErrorType type)
              => new ProcessResult { Success = false, ErrorMessage = message, ErrorType = type };

@@ -8,6 +8,10 @@ namespace Calculator.Core.Exceptions
 {
     public class UnknownOperatorException : Exception
     {
+        /// <summary>
+        /// Signalizes that expression contains an unknown operator.
+        /// </summary>
+        /// <param name="operatorValue"></param>
         public UnknownOperatorException(string operatorValue)
             : base($"Unknown operator encountered: {operatorValue}")
         {

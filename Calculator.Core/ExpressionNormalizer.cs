@@ -16,7 +16,11 @@ public class ExpressionNormalizer : IExpressionNormalizer
         _signNormalizer = signNormalizer;
         _unaryMerger = unaryMerger;
     }
-
+    /// <summary>
+    /// Normalizes the expression by handling sign normalization and unary operator classification and merging.
+    /// </summary>
+    /// <param name="expressionTokens"></param>
+    /// <returns>Parsing result success whether nomralization was sucessfull, otherwise returns failure with user friendly error messsage</returns>
     public ParsingResult NormalizeExpression(List<IExpressionToken> expressionTokens)
     {
         try
