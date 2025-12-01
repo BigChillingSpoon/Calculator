@@ -47,6 +47,7 @@ Presentation (WPF)
 AppLayer (Orchestration)
 Core (Tokenizer → Normalizer → Validator → Evaluator)
 IO (Async file operations)
+Tests( xUnit tests)
 ```
 ### Key Architectural Decisions
 
