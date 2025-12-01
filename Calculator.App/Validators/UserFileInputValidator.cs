@@ -54,15 +54,22 @@ namespace Calculator.AppLayer.Validators
 
         private bool IsValidPath(string path)
         {
+            // checks if path contains invalid characters
+            var invalidPathChars = Path.GetInvalidPathChars();
+            if (path.Any(c => invalidPathChars.Contains(c)))
+                return false;
+
+            // tries to get absolute path - detects fomral misstakes
             try
             {
                 Path.GetFullPath(path);
-                return true;
             }
             catch
             {
                 return false;
             }
+
+            return true;
         }
 
         private bool CanWriteToDirectory(string directory)
