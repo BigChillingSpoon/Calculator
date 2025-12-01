@@ -18,7 +18,7 @@ public class UserFileInputValidatorTests
     [Fact]
     public void ProcessUserFileInputs_Fails_WhenInputPathEmpty()
     {
-        var result = _validator.ProcessUserFileInputs("", "C:\\output");
+        var result = _validator.ProcessUserFileInputs("", "C:\\output","");
 
         Assert.False(result.Success);
         Assert.Contains("empty", result.ErrorMessage);
@@ -27,7 +27,7 @@ public class UserFileInputValidatorTests
     [Fact]
     public void ProcessUserFileInputs_Fails_WhenInputNotTxt()
     {
-        var result = _validator.ProcessUserFileInputs("input.pdf", "C:\\output");
+        var result = _validator.ProcessUserFileInputs("input.pdf", "C:\\output","nottxt.nottxt");
 
         Assert.False(result.Success);
         Assert.Contains(".txt file", result.ErrorMessage);
@@ -36,7 +36,7 @@ public class UserFileInputValidatorTests
     [Fact]
     public void ProcessUserFileInputs_Fails_WhenOutputEmpty()
     {
-        var result = _validator.ProcessUserFileInputs("input.txt", "");
+        var result = _validator.ProcessUserFileInputs("input.txt", "", "");
 
         Assert.False(result.Success);
         Assert.Contains("path is empty", result.ErrorMessage);
@@ -45,7 +45,7 @@ public class UserFileInputValidatorTests
     [Fact]
     public void ProcessUserFileInputs_Fails_WhenInputPathInvalid()
     {
-        var result = _validator.ProcessUserFileInputs("**|invalid.txt", "C:\\output");
+        var result = _validator.ProcessUserFileInputs("**|invalid.txt", "C:\\output","");
 
         Assert.False(result.Success);
         Assert.Contains("valid path", result.ErrorMessage);
@@ -55,7 +55,7 @@ public class UserFileInputValidatorTests
     [Fact]
     public void ProcessUserFileInputs_Fails_WhenInputFileNotExists()
     {
-        var result = _validator.ProcessUserFileInputs("nonexistent.txt", Path.GetTempPath());
+        var result = _validator.ProcessUserFileInputs("nonexistent.txt", Path.GetTempPath(),"");
 
         Assert.False(result.Success);
         Assert.Equal("Input file does not exist", result.ErrorMessage);

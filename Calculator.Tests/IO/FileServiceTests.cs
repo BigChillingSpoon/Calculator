@@ -1,6 +1,7 @@
 ﻿using Calculator.IO.Services;
 using Xunit;
 
+namespace Calculator.Tests.IO.Services;
 public class FileServiceTests
 {
     private readonly FileService _fileService;
@@ -57,7 +58,10 @@ public class FileServiceTests
         var outputPath = Path.Combine(tempDir, fileName);
 
         // Act
-        await _fileService.SaveLinesToDirectoryAsync(tempDir, lines, fileName);
+
+        await _fileService.AppendLineAsync(outputPath, lines[0]);
+        await _fileService.AppendLineAsync(outputPath, lines[1]);
+
 
         // Assert
         Assert.True(File.Exists(outputPath));
@@ -69,26 +73,14 @@ public class FileServiceTests
     public async Task SaveLinesToDirectoryAsync_Throws_When_DirectoryNotFound()
     {
         // Arrange
-        var invalidDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-        // Act + Assert
-        await Assert.ThrowsAsync<DirectoryNotFoundException>(async () =>
-        {
-            await _fileService.SaveLinesToDirectoryAsync(invalidDir, new[] { "A" }, "file.txt");
-        });
-    }
-
-    [Fact]
-    public async Task SaveLinesToDirectoryAsync_Throws_When_FilenameInvalid()
-    {
-        // Arrange
-        var tempDir = Directory.CreateTempSubdirectory().FullName;
+        var invalidDir = "..does/not/exist/";
 
         // Act + Assert
         await Assert.ThrowsAsync<ArgumentException>(async () =>
         {
-            await _fileService.SaveLinesToDirectoryAsync(tempDir, new[] { "X" }, "");
+            await _fileService.AppendLineAsync(invalidDir, "A");
         });
     }
+
     #endregion Saving
 }

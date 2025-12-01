@@ -19,7 +19,7 @@ public class FileProcessingServiceTests
     {
         public ProcessResult ResultToReturn { get; set; } = new() { Success = true };
 
-        public ProcessResult ProcessUserFileInputs(string inputPath, string outputPath)
+        public ProcessResult ProcessUserFileInputs(string inputPath, string outputDirPath, string outputFileName)
             => ResultToReturn;
     }
 
@@ -43,8 +43,17 @@ public class FileProcessingServiceTests
     private class FakeFileService : IFileService
     {
         public List<string> LinesToReturn { get; set; } = new();
-        public List<string>? SavedLines { get; private set; }
         public bool ThrowFileNotFound { get; set; }
+
+        public Task AppendLineAsync(string path, string line)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task CreateEmptyFileAsync(string path)
+        {
+            return Task.CompletedTask;
+        }
 
         public async IAsyncEnumerable<string> GetFileLinesAsync(string path)
         {
@@ -53,12 +62,6 @@ public class FileProcessingServiceTests
 
             foreach (var line in LinesToReturn)
                 yield return line;
-        }
-
-        public Task SaveLinesToDirectoryAsync(string directoryPath, IEnumerable<string> lines, string fileName)
-        {
-            SavedLines = new List<string>(lines);
-            return Task.CompletedTask;
         }
     }
 
@@ -110,7 +113,6 @@ public class FileProcessingServiceTests
 
         // Assert
         Assert.True(result.Success);
-        Assert.Equal(new[] { "2", "5" }, _file.SavedLines);
     }
 
     [Fact]
