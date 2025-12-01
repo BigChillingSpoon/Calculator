@@ -76,7 +76,7 @@ public class FileServiceTests
         var invalidDir = "..does/not/exist/";
 
         // Act + Assert
-        await Assert.ThrowsAsync<ArgumentException>(async () =>
+        await Assert.ThrowsAsync<DirectoryNotFoundException>(async () =>
         {
             await _fileService.AppendLineAsync(invalidDir, "A");
         });
