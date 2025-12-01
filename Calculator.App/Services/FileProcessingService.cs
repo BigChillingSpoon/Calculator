@@ -64,11 +64,11 @@ namespace Calculator.AppLayer.Services
 
                 return Success();
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException)
             {
                 return Fail("Input file not found", ErrorType.Error);
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
                 return Fail("Access denied to the file system", ErrorType.Error);
             }

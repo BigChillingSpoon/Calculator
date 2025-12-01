@@ -11,8 +11,7 @@ namespace Calculator.Core.Models.Enums
         Addition,
         Subtraction,
         Multiplication,
-        Division,
-        Unknown
+        Division
     }
 
     public static class OperationTypeExtensions
