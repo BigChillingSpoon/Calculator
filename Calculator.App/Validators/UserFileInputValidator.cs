@@ -17,9 +17,9 @@ namespace Calculator.AppLayer.Validators
         /// Validates user provided file paths for input and output.
         /// </summary>
         /// <param name="inputPath"></param>
-        /// <param name="outputPath"></param>
+        /// <param name="outputDirPath"></param>
         /// <returns>ProcessResult suceess whether both paths are valid, otherwise returns failure.</returns>
-        public ProcessResult ProcessUserFileInputs(string inputPath, string outputPath)
+        public ProcessResult ProcessUserFileInputs(string inputPath, string outputDirPath, string outputFileName)
         {
             if (string.IsNullOrWhiteSpace(inputPath))
                 return Fail("Input file path is empty", ErrorType.Warning);
@@ -27,26 +27,30 @@ namespace Calculator.AppLayer.Validators
             if (!inputPath.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
                 return Fail("Input file must be a .txt file", ErrorType.Warning);
 
-            if (string.IsNullOrWhiteSpace(outputPath))
+            if (string.IsNullOrWhiteSpace(outputDirPath))
                 return Fail("Output directory path is empty", ErrorType.Warning);
 
             // Validate path format
             if (!IsValidPath(inputPath))
                 return Fail("Input file path is not a valid path format", ErrorType.Warning);
 
-            if (!IsValidPath(outputPath))
+            if (!IsValidPath(outputDirPath))
                 return Fail("Output directory path is not a valid path format", ErrorType.Warning);
+
+            // Validate output file name
+            if (!IsFileNameValid(outputFileName))
+                return Fail("Output file name contains invalid characters", ErrorType.Warning);
 
             // Check file exists
             if (!File.Exists(inputPath))
                 return Fail("Input file does not exist", ErrorType.Error);
 
             // Check directory exists
-            if (!Directory.Exists(outputPath))
+            if (!Directory.Exists(outputDirPath))
                 return Fail("Output directory does not exist", ErrorType.Error);
 
             // Check write permission
-            if (!CanWriteToDirectory(outputPath))
+            if (!CanWriteToDirectory(outputDirPath))
                 return Fail("Cannot write to output directory", ErrorType.Error);
 
             return Success();
@@ -70,6 +74,12 @@ namespace Calculator.AppLayer.Validators
             }
 
             return true;
+        }
+
+        private bool IsFileNameValid(string fileName)
+        {
+            var invalidFileNameChars = Path.GetInvalidFileNameChars();
+            return !fileName.Any(c => invalidFileNameChars.Contains(c));
         }
 
         private bool CanWriteToDirectory(string directory)

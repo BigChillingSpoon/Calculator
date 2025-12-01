@@ -30,40 +30,46 @@ namespace Calculator.AppLayer.Services
         /// <param name="outputFileName"></param>
         /// <returns>ProcessResult success whether all evaluations were done, otherwise returns faliure with user friendly message.</returns>
         public async Task<ProcessResult> ProcessEvaluationFromFileAsync( string inputFilePath, string outputDirectoryPath, string outputFileName)
-        {
-            // validate input values
-            var validation = _inputValidator.ProcessUserFileInputs(inputFilePath, outputDirectoryPath);
+        { 
+            //validates input values
+            var validation = _inputValidator.ProcessUserFileInputs(inputFilePath, outputDirectoryPath, outputFileName);
             if (!validation.Success)
                 return validation;
 
-            // prepare output filename
+            //prepare output file name 
             outputFileName = PrepareOutputFileName(outputFileName);
-
+            var outputFilePath = Path.Combine(outputDirectoryPath, outputFileName);
             try
             {
-                // lazily read lines from input file
-                var outputLines = new List<string>();
+                // create or clear output file
+                await _fileService.CreateEmptyFileAsync(outputFilePath);
 
-                await foreach (var line in _fileService.GetFileLinesAsync(inputFilePath))
+                // CPU-bound evaluation pipeline
+                await Task.Run(async () =>
                 {
-                    if (string.IsNullOrWhiteSpace(line))
-                        continue;
+                    await foreach (var line in _fileService.GetFileLinesAsync(inputFilePath))
+                    {
+                        if (string.IsNullOrWhiteSpace(line))
+                            continue;
 
-                    var evaluation = _expressionEvaluator.Evaluate(line);
+                        var evaluation = _expressionEvaluator.Evaluate(line);
 
-                    string output = evaluation.Success ? evaluation.Value : evaluation.ErrorMessage;
+                        string output = evaluation.Success
+                            ? evaluation.Value
+                            : evaluation.ErrorMessage;
 
-                    outputLines.Add(output);
-                }
+                        // append
+                        await _fileService.AppendLineAsync(outputFilePath, output);
+                    }
+                });
 
-                // let IO layer write the full content
-                await _fileService.SaveLinesToDirectoryAsync(
-                    outputDirectoryPath,
-                    outputLines,
-                    outputFileName);
-
-                return Success();
+                return new ProcessResult
+                {
+                    Success = true,
+                    ErrorType = ErrorType.None
+                };
             }
+
             catch (FileNotFoundException)
             {
                 return Fail("Input file not found", ErrorType.Error);

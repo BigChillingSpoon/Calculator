@@ -9,6 +9,6 @@ namespace Calculator.AppLayer.Interfaces
 {
     public interface IUserFileInputValidator
     {
-        public ProcessResult ProcessUserFileInputs(string inputPath, string outputPath);
+        public ProcessResult ProcessUserFileInputs(string inputPath, string outputDirPath, string outputFileName);
     }
 }

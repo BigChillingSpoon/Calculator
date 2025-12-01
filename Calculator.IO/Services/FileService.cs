@@ -22,29 +22,43 @@ namespace Calculator.IO.Services
                 yield return line;
             }
         }
-
-        public async Task SaveLinesToDirectoryAsync(string directoryPath, IEnumerable<string> lines, string ouputFileName)
+        /// <summary>
+        /// If file does not exist creates new file, if file already exists clears the file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public async Task CreateEmptyFileAsync(string path)
         {
-            if (!Directory.Exists(directoryPath))
-                throw new DirectoryNotFoundException($"Output directory not found: {directoryPath}");
-            if (string.IsNullOrWhiteSpace(ouputFileName))
-                throw new ArgumentException("Output file name cannot be null or whitespace.", nameof(ouputFileName));
-            
-            var outputFilePath = Path.Combine(directoryPath, ouputFileName);
-
             await using var writer = new StreamWriter(
                 new FileStream(
-                    outputFilePath,
-                    FileMode.Create,
+                    path,
+                    FileMode.Create,    // ALWAYS clears
                     FileAccess.Write,
                     FileShare.None,
                     bufferSize: 8192,
                     useAsync: true));
 
-            foreach (var line in lines)
-            {
-                await writer.WriteLineAsync(line);
-            }
+            await writer.FlushAsync();
+        }
+
+        /// <summary>
+        /// Appends line to given file  
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        public async Task AppendLineAsync(string path, string line)
+        {
+            await using var writer = new StreamWriter(
+                new FileStream(
+                    path,
+                    FileMode.Append,
+                    FileAccess.Write,
+                    FileShare.Read,
+                    bufferSize: 8192,
+                    useAsync: true));
+
+            await writer.WriteLineAsync(line);
         }
     }
 }
