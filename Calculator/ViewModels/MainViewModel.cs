@@ -21,6 +21,7 @@ namespace Calculator.ViewModels
         private readonly INotifyService _notifyService;
         private readonly IDialogService _dialogService;
         private readonly IFileProcessingService _fileProcessingService;
+        private const string InputErrorString = "Error"; //could be moved to resources for localization
         #endregion Vars
 
         #region Constructors
@@ -87,6 +88,7 @@ namespace Calculator.ViewModels
             set => SetProperty(ref _outputFileName, value);
         }
 
+       
         #endregion Properties
 
         #region Commands
@@ -106,7 +108,7 @@ namespace Calculator.ViewModels
             if (string.IsNullOrWhiteSpace(_input))
                 return;
 
-            IsBusy = true;
+            SetBusyStatus(true, "Evaluating expression...");
             var result = _evaluationProcessingService.ProcessEvaluation(_input);
 
             if (result.Success)
@@ -117,7 +119,7 @@ namespace Calculator.ViewModels
             else
                 HandleEvaluationError(result);
 
-            IsBusy = false;
+            SetBusyStatus(false);
         }
 
         private void OnClear(object parameter)
@@ -130,6 +132,7 @@ namespace Calculator.ViewModels
         {
             if (parameter is string digitString)
             {
+                CleanInputOnError();
                 //whether is digit pressed after evaluation, input will be replaced -> new calculation, otherwise append
                 Input = !string.IsNullOrEmpty(_currentExpression) ? digitString : _input + digitString;
                 CurrentExpression = String.Empty;
@@ -140,6 +143,7 @@ namespace Calculator.ViewModels
         {
             if (parameter is string operationString)
             {
+                CleanInputOnError();
                 Input += operationString;
                 CurrentExpression = String.Empty;
             }
@@ -147,6 +151,7 @@ namespace Calculator.ViewModels
 
         private void OnBackSpace(object parameter)
         {
+            CleanInputOnError();
             if (!string.IsNullOrEmpty(Input))
                 Input = Input[..^1];
         }
@@ -154,7 +159,7 @@ namespace Calculator.ViewModels
         // File operations
         private async Task OnSelectInputFileAsync()
         {
-            IsBusy = true;
+            SetBusyStatus(true, "Selecting input file...");
 
             try
             {
@@ -174,13 +179,13 @@ namespace Calculator.ViewModels
             }
             finally
             {
-                IsBusy = false;
+                SetBusyStatus(false);
             }
         }
 
         private async Task OnSelectOutputDirectory()
         {
-            IsBusy = true;
+            SetBusyStatus(true, "Selecting output directory...");
 
             try
             {
@@ -200,7 +205,7 @@ namespace Calculator.ViewModels
             }
             finally
             {
-                IsBusy = false;
+                SetBusyStatus(false);
             }
         }
 
@@ -212,7 +217,7 @@ namespace Calculator.ViewModels
                 return;
             }
 
-            IsBusy = true;
+            SetBusyStatus(true, "Processing evaluations from file...");
 
             var processResult = await _fileProcessingService.ProcessEvaluationFromFileAsync(InputFilePath, OutputDirectory, OutputFileName);
 
@@ -220,7 +225,8 @@ namespace Calculator.ViewModels
                 _notifyService.ShowInfo("File processed successfully. Check output directory for results.");
             else
                 HandleProcessingError(processResult);
-            IsBusy = false;
+
+            SetBusyStatus(false);
         }
 
         private bool CanEvaluateFromFile()
@@ -236,7 +242,7 @@ namespace Calculator.ViewModels
         {
             if (result.ErrorType == ErrorType.Error)
             {
-                Input = "Error";
+                Input = InputErrorString;
                 _notifyService.ShowError(result.ErrorMessage);
             }
             else if (result.ErrorType == ErrorType.Warning)
@@ -255,6 +261,12 @@ namespace Calculator.ViewModels
             {
                 _notifyService.ShowWarning(processResult.ErrorMessage);
             }
+        }
+
+        private void CleanInputOnError()
+        {
+            if(Input == InputErrorString)
+                Input = string.Empty;
         }
         #endregion Helper Methods
     }

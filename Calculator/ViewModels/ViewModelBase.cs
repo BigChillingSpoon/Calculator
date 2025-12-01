@@ -31,7 +31,23 @@ namespace Calculator.ViewModels
         public bool IsBusy
         {
             get => _isBusy;
-            protected set => SetProperty(ref _isBusy, value);
+            private set => SetProperty(ref _isBusy, value);
+        }
+
+        private string _busyStatusMessage = string.Empty;
+        public string BusyStatusMessage
+        {
+            get => _busyStatusMessage;
+            set => SetProperty(ref _busyStatusMessage, value);
+        }
+
+        protected void SetBusyStatus(bool isBusy, string? message = null)
+        {
+            IsBusy = isBusy;
+            if (isBusy && message != null)
+                BusyStatusMessage = message;
+            else if (!isBusy)
+                BusyStatusMessage = string.Empty;
         }
     }
 }

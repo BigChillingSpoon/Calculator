@@ -232,11 +232,20 @@
         <!-- BUSY OVERLAY -->
         <Grid Style="{StaticResource LoadingSpinnerStyle}"
               Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}">
+            <StackPanel HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical"
+                Margin="0,0,0,20">
 
-            <Viewbox Style="{StaticResource SpinnerViewboxStyle}">
-                <Control Template="{StaticResource SpinnerTemplate}"/>
-            </Viewbox>
+                <!--SPINNER-->
+                <Viewbox Style="{StaticResource SpinnerViewboxStyle}">
+                    <Control Template="{StaticResource SpinnerTemplate}"/>
+                </Viewbox>
 
+                <!-- STATUS MESSAGE -->
+                <TextBlock Style="{StaticResource BusyStatusMessageTextBlockStyle}"
+                           Text="{Binding BusyStatusMessage}"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

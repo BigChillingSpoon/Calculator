@@ -20,6 +20,7 @@ namespace Calculator.Services
         public bool ShowOpenFileDialog(out string filePath)
         {
             var dialog = new OpenFileDialog();
+            dialog.Filter = "Text Files (*.txt)|*.txt";
             filePath = dialog.ShowDialog() == true ? dialog.FileName : String.Empty;
             return !String.IsNullOrEmpty(filePath);
         }
