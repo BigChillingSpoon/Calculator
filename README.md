@@ -300,7 +300,7 @@ Result:     -4
    - Each expression evaluated independently
 
 **Example**: Processing 10GB file with 1M lines:
-- **Processing**: One line at a time
+- **Processing**: One line at a time, no datasets are stored into memory
 - **UI**: Remains responsive (async/await)
 
 ## Getting Started
