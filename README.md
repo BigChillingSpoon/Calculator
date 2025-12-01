@@ -315,9 +315,16 @@ cd Calculator
 ```bash
 dotnet run --project Calculator/Calculator.csproj
 ```
+## Screenshots
+<img width="440" height="603" alt="Snímek obrazovky 2025-12-01 171324" src="https://github.com/user-attachments/assets/ea434b5f-e515-4352-bf85-b8c48930869a" />
+<img width="434" height="599" alt="Snímek obrazovky 2025-12-01 171408" src="https://github.com/user-attachments/assets/58fa4ac0-5f33-48c7-9181-cee3a80b7634" />
+<img width="1268" height="602" alt="Snímek obrazovky 2025-12-01 171010" src="https://github.com/user-attachments/assets/4049d18c-423b-4412-b0b8-9201710be66b" />
+<img width="433" height="602" alt="Snímek obrazovky 2025-12-01 172155" src="https://github.com/user-attachments/assets/d2845516-6e13-454b-8f4b-2b041438692b" />
+
 
 ## Future Enhancements
-
+- Custom tile bar + message box
+  
 - Parentheses support
 
 - Additional operators (^, %)
