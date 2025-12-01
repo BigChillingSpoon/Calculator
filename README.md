@@ -59,13 +59,12 @@ IO (Async file operations)
 **2. Why Separate Normalization Steps?**
 - **Single Responsibility**: Each normalizer does one thing well
 - **Debuggability**: Easy to trace which step caused an issue
-- **Flexibility**: Easy to add/remove normalization rules
+- **Flexibility**: Easy to add/remove normalization rules - for example adding new operators, brackets etc..
 - **Testing**: Each step can be unit tested independently
 
 **3. Why BigInteger?**
 - **No Overflow**: Handles numbers of any size
 - **Accuracy**: Integer division without floating-point errors
-- **Requirements**: Spec asked for large number support
 
 **4. Why Async File Processing?**
 - **Responsiveness**: UI never freezes
@@ -301,7 +300,7 @@ Result:     -4
    - Each expression evaluated independently
 
 **Example**: Processing 10GB file with 1M lines:
-- **Processing**: One line at a time
+- **Processing**: One line at a time, no datasets are stored into memory
 - **UI**: Remains responsive (async/await)
 
 ## Getting Started
@@ -316,9 +315,16 @@ cd Calculator
 ```bash
 dotnet run --project Calculator/Calculator.csproj
 ```
+## Screenshots
+<img width="440" height="603" alt="Snímek obrazovky 2025-12-01 171324" src="https://github.com/user-attachments/assets/ea434b5f-e515-4352-bf85-b8c48930869a" />
+<img width="434" height="599" alt="Snímek obrazovky 2025-12-01 171408" src="https://github.com/user-attachments/assets/58fa4ac0-5f33-48c7-9181-cee3a80b7634" />
+<img width="1268" height="602" alt="Snímek obrazovky 2025-12-01 171010" src="https://github.com/user-attachments/assets/4049d18c-423b-4412-b0b8-9201710be66b" />
+<img width="433" height="602" alt="Snímek obrazovky 2025-12-01 172155" src="https://github.com/user-attachments/assets/d2845516-6e13-454b-8f4b-2b041438692b" />
+
 
 ## Future Enhancements
-
+- Custom tile bar + message box
+  
 - Parentheses support
 
 - Additional operators (^, %)
